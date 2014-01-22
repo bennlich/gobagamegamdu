@@ -3,6 +3,8 @@ vector = require('libs.hump.vector')
 
 Planet = require('Planet')
 require('input')
+require('exhaust')
+require('draw')
 
 width, height = love.graphics.getDimensions()
 
@@ -56,18 +58,22 @@ function updateShip(dt)
 end
 
 function love.load()
+	loadExhaust()
 end
 
 function love.update(dt)
 	-- mouse_x = love.mouse.getX()
 	-- mouse_y = love.mouse.getY()
 	updateShip(dt)
+	updateExhaust(ship, dt)
 end
 
 function love.draw()
 	local keymap = { 'a', 's', 'd', 'f', 'h', 'j', 'k', 'l' }
 	love.graphics.reset()
-	love.graphics.rectangle('fill', ship.pos.x-5, ship.pos.y-5, 10, 10)
+	-- love.graphics.rectangle('fill', ship.pos.x-5, ship.pos.y-5, 10, 10)
+	drawExhaust()
+	drawShip(ship)
 	table.foreach(planets, function(k, planet)
 		love.graphics.circle('line', planet.pos.x, planet.pos.y, 10, 100)
 		love.graphics.print(keymap[k], planet.pos.x-5, planet.pos.y-5)
