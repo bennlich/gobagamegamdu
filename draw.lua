@@ -1,3 +1,4 @@
+
 function drawShip( ship )
   local vertices = {
     -15, -10,
@@ -15,6 +16,8 @@ function drawShip( ship )
   love.graphics.push()
   love.graphics.translate(ship.pos.x, ship.pos.y)
   love.graphics.rotate(-ship.angle)
+
+
   love.graphics.setColor(outerGlowColor)
   love.graphics.circle('fill', -15, 0, 10, 30)
   love.graphics.setColor(innerGlowColor)
@@ -22,5 +25,7 @@ function drawShip( ship )
   love.graphics.setColor(shipColor)
   love.graphics.polygon('line', vertices)
   love.graphics.polygon('fill', vertices)
+
   love.graphics.pop()
+
 end
