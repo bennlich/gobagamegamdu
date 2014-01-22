@@ -15,7 +15,7 @@ function drawShip( ship )
   love.graphics.setLineStyle('smooth')
   love.graphics.push()
   love.graphics.translate(ship.pos.x, ship.pos.y)
-  love.graphics.rotate(-ship.angle)
+  love.graphics.rotate(ship.angle)
 
 
   love.graphics.setColor(outerGlowColor)

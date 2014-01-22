@@ -46,7 +46,8 @@ function updateShip(dt)
 	-- end
 	
 	ship.vel = ship.vel + delta * ship.acceleration * dt
-	ship.angle = ship.vel:angleTo(vector(1,0))
+	ship.angle = math.atan2(ship.vel.y, ship.vel.x)
+  print(ship.angle)
 
 	ship.pos = ship.pos + ship.vel * dt
 
