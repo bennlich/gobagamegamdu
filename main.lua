@@ -16,6 +16,7 @@ function love.update( dt )
     client:update(dt)
 end
 
-function love.keypressed(  )
-  client:send({message = "hello"})
+function love.keypressed( key )
+  success, error = client:send({message = key})
+  print("Sending message. Success = " .. tostring(success) .. ", Error = " .. error)
 end
