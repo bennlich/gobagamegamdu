@@ -7,6 +7,7 @@ end
 
 function love.load(  )
   client = lube.tcpClient()
+  client.handshake = "moosepants"
   client.callbacks.recv = receiveData
   success, error = client:connect('localhost', 8080)
   print (success, error)

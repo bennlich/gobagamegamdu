@@ -4,16 +4,18 @@ require("libs.LUBE")
 function love.load()
 	server = lube.tcpServer()
 
+	server.handshake = "moosepants"
+
 	server.callbacks.connect = function(clientid)
-		print('connected to' .. clientid)
+		print('connected to' .. tostring(clientid))
 	end
 
 	server.callbacks.disconnect = function(clientid)
-		print('disconnected from' .. clientid)
+		print('disconnected from' .. tostring(clientid))
 	end
 	
 	server.callbacks.recv = function(data, clientid)
-		print(data .. 'from' .. clientid)
+		print(data .. 'from' .. tostring(clientid))
 	end
 
 	server:listen(8080)
