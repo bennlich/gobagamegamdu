@@ -19,19 +19,19 @@ function update(dt)
   old_state = curr_state
 end
 
-function keydown( key )
+function isKeyDown( key )
   return curr_state[key]
 end
 
-function keyup( key )
+function isKeyUp( key )
   return not curr_state[key]
 end
 
-function wasjustpressed( key )
+function wasJustPressed( key )
   return (not old_state[key] and curr_state[key])
 end
 
-function wasjustreleased( key )
+function wasJustReleased( key )
   return (old_state[key] and not curr_state[key])
 end
 
