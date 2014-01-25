@@ -9,7 +9,7 @@ Camera = Class{
 }
 
 function Camera:getCamX()
-  return math.max(winWidth/2, self.following.x)
+  return math.min(math.max(winWidth/2, self.following.x), activeScene.width-winWidth/2)
 end
 
 -- Sets the coordinate system to scale and position your character properly.

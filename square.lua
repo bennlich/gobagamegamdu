@@ -2,7 +2,7 @@ Class = require("libs.hump.class")
 
 Square = Class{
   init = function( self, pos, size, color )
-    self.pos = pos
+    self.pos = vector(unpack(pos))
     self.size = size
     self.color = color
   end
