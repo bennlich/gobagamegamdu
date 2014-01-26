@@ -9,6 +9,7 @@
     }
 	},
   collisionEvents = {
-    {names = {"player1", "dog"}, script="doghit"}
+    {names = {"player1", "dog"}, onCollide = "doghit", onRelease = "release", onColliding = "indog"},
+    {names = {"player1", "tower"}, onCollide = "turnred", onRelease = "unturnred"}
   }
 }
