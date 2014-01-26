@@ -98,15 +98,17 @@ function Scene:processCollisions()
   for i=1,#self.sortedList do
     for j=i+1,#self.sortedList do
       obj1, obj2 = self.sortedList[i], self.sortedList[j]
-      local x1,y1,z1,s1,cd1 = obj1.pos.x, obj1.pos.y, obj1.elevation, obj1.size, obj1.thickness
-      local x2,y2,z2,s2,cd2 = obj2.pos.x, obj2.pos.y, obj2.elevation, obj2.size, obj2.thickness
+      local x1,y1,z1,w1,d1,h1 = obj1:getCollisionRect()
+      local x2,y2,z2,w2,d2,h2 = obj2:getCollisionRect()
+      -- local x1,y1,z1,w1,d1,h1 = obj1.pos.x, obj1.pos.y, obj1.elevation, obj1.size, obj1.depth, obj1.size
+      local x2,y2,z2,w2,d2,h2 = obj2.pos.x, obj2.pos.y, obj2.elevation, obj2.size, obj2.depth, obj1.size
 
-      if x1 - s1/2  < x2 + s2/2 and
-         x2 - s2/2  < x1 + s1/2 and
-         y1 - cd1/2 < y2 + cd2/2 and
-         y2 - cd2/2 < y1 + cd1/2 and
-         z1 < z2 + s2 and
-         z2 < z1 + s1 then
+      if x1 - w1/2  < x2 + w2/2 and
+         x2 - w2/2  < x1 + w1/2 and
+         y1 - d1/2 < y2 + d2/2 and
+         y2 - d2/2 < y1 + d1/2 and
+         z1 < z2 + h2 and
+         z2 < z1 + h1 then
          self:collided(obj1, obj2)
       end
     end

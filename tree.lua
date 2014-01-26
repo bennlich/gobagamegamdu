@@ -13,7 +13,7 @@ Tree = Class{__includes=Loadable,
     trunkHeight = 100,
     trunkWidth = 10,
     color = {200, 100, 50},
-    thickness = 10,
+    depth = 10,
     name = "missingno"
   },
   init = function(self, opts)
