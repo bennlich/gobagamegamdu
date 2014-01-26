@@ -1,6 +1,7 @@
 Class = require("libs.hump.class")
 
 require("loadable")
+require("label")
 
 Square = Class{__includes=Loadable,
   defaults = {
@@ -10,7 +11,14 @@ Square = Class{__includes=Loadable,
     elevation = 0,
     thickness = 10,
     name = "missingno"
-  }
+  },
+  init = function(self, opts)
+    Loadable.init(self, opts)
+    self.label = Label({
+      base = self,
+      content = "a square"
+    })
+  end
 }
 
 function Square:update(dt)
@@ -25,4 +33,6 @@ function Square:draw(camera)
   local headY = groundPos.y - self.size - self.elevation
   love.graphics.rectangle("fill", groundPos.x, headY, self.size, self.size)
   love.graphics.pop()
+
+  self.label:draw(camera)
 end

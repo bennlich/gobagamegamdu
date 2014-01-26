@@ -10,8 +10,10 @@ Loadable = Class{
         or self.defaults[k]
     end
     -- Lets you pass in either a vector or a pair of numbers
-    self.pos = (vector.isvector(self.pos) and self.pos) 
-      or vector(unpack(self.pos))
+    if self.pos then
+      self.pos = (vector.isvector(self.pos) and self.pos) 
+        or vector(unpack(self.pos))
+    end
   end,
   defaults = {
     --Implemented by subclass
