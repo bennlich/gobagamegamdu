@@ -3,7 +3,7 @@ require('square')
 pretty = require('pl.pretty')
 
 Scene = Class{
-  init = function(self, filename, version)
+  init = function(self, filename)
     io.input(filename..".scn")
     local data = pretty.read(io.read("*all"))
 
@@ -11,10 +11,9 @@ Scene = Class{
     self.objects = {}
 
     self.width = data.width
-    for k,v in pairs(data.squares) do
-      self:add(k, Square(v["pos"..vstr] or v.pos,
-                         v["size"..vstr] or v.size,
-                         v["color"..vstr] or v.color))
+    print(self.width)
+    for name,v in pairs(data.squares) do
+      self:add(name, Square(v))
     end
   end
 }
