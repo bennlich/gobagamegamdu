@@ -1,6 +1,7 @@
 Class = require('libs.hump.class')
 require('square')
 pretty = require('pl.pretty')
+require('scripts')
 
 Scene = Class{
   init = function(self, filename)
@@ -9,16 +10,28 @@ Scene = Class{
 
     vstr = tostring(version)
     self.objects = {}
+    self.collisionRegistry = {}
 
     self.width = data.width
-    for name,v in pairs(data.squares) do
-      self:add(name, Square(v))
+    for _,v in pairs(data.squares) do
+      self:add(v.name, Square(v))
+    end
+    for _,v in pairs(data.collisionEvents) do
+      self:registerCollisionEvent(v)
     end
   end
 }
 
 function Scene:add(name, obj)
   self.objects[name] = obj
+end
+
+function Scene:registerCollisionEvent(opts)
+  table.insert(self.collisionRegistry, opts)
+end
+
+function doghit()
+  print('hello')
 end
 
 function Scene:update( dt )
@@ -61,6 +74,13 @@ function Scene:processCollisions()
   end
 end
 
-function Scene:collided( obj1, obj2 )
-  print('howdy')
+function Scene:collided(obj1, obj2)
+  -- See if this collision matches anything in the collision registry
+  for _,v in ipairs(self.collisionRegistry) do
+    if (obj1.name == v.names[1] and obj2.name == v.names[2]) then
+       scripts[v.script](self, obj1, obj2)
+    elseif (obj1.name == v.names[2] and obj2.name == v.names[1]) then
+       scripts[v.script](self, obj2, obj1)
+    end
+  end
 end

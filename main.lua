@@ -9,8 +9,9 @@ function love.load()
   winWidth, winHeight = love.window.getDimensions()
   input.register()
 
-  player = Player({pos = vector(30, 30), size = 50, color = {20, 30, 160}})
-  world_vers = 2
+  world_vers = 1
+  player = Player({pos = vector(30, 30), size = 50, color = {20, 30, 160}, 
+                  name = "player" .. tostring(world_vers)})
   camera = Camera(player, winHeight/2)
   scene1 = Scene("scene1")
   activeScene = scene1
