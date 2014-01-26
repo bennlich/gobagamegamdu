@@ -1,6 +1,6 @@
 Class = require('libs.hump.class')
 require('square')
--- require('tree')
+require('tree')
 pretty = require('pl.pretty')
 require('scripts')
 
@@ -19,17 +19,18 @@ Scene = Class{
 
     self.width = data.width
     self.name = data.name
+    self.horizon = data.horizon
 
     if data.squares then
       for _,v in pairs(data.squares) do
         self:add(v.name, Square(v))
       end
     end
-    -- if data.trees then 
-    --   for _,v in pairs(data.trees) do
-    --     self:add(v.name, Tree(v))
-    --   end
-    -- end
+    if data.trees then 
+      for _,v in pairs(data.trees) do
+        self:add(v.name, Tree(v))
+      end
+    end
     if data.collisionEvents then
       for _,v in pairs(data.collisionEvents) do
         self:registerCollisionEvent(v)

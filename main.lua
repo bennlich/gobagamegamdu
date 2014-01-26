@@ -12,9 +12,9 @@ function love.load()
   world_vers = 1
   player = Player({pos = vector(30, 30), size = 50, color = {20, 30, 160}, 
                   name = "player" .. tostring(world_vers)})
-  camera = Camera(player, winHeight)
   scenes = {}
   switchScene("beachblimp")
+  camera = Camera(player, activeScene.horizon*winHeight)
 end
 
 function love.update( dt )

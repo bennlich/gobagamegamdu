@@ -1,6 +1,7 @@
 {
   name = "beachblimp",
 	width = 700,
+  horizon = 1.0,
 	squares = {
 		{name = "fisherpit", pos = {400, 300}, size = 70, color = {0, 0, 255}},
 		{name = "skyblimp", pos = {-1000, 301}, size = 10000, color = {245, 245, 220}},
