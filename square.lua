@@ -1,14 +1,14 @@
 Class = require("libs.hump.class")
 
 Square = Class{
-  init = function( self, pos, size, color )
-    self.pos = vector(unpack(pos))
+  init = function(self, pos, size, color)
+    self.pos = (vector.isvector(pos) and pos) or vector(unpack(pos))
     self.size = size
     self.color = color
   end
 }
 
-function Square:update( dt )
+function Square:update(dt)
   -- body
 end
 
