@@ -12,13 +12,18 @@ function love.load()
   world_vers = 1
   player = Player({pos = vector(30, 30), size = 50, color = {20, 30, 160}, 
                   name = "player" .. tostring(world_vers)})
-  camera = Camera(player, winHeight/2)
+  camera = Camera(player, winHeight)
   scenes = {}
-  switchScene("scene1")
+  switchScene("beachblimp")
 end
 
 function love.update( dt )
   input.update(dt)
+  -- if input.wasJustPressed('space') then 
+  --   if world_vers == 1 then world_vers = 2
+  --   elseif world_vers == 2 then world_vers = 1  end
+  --   player.name = "player"..tostring(world_vers)
+  -- end  
   activeScene:update(dt)
 end
 

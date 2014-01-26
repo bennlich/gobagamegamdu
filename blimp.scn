@@ -1,0 +1,7 @@
+{
+	name = "blimp",
+  width = 1000,
+  entrances = {
+    {from = "beachblimp", pos = {0, 0}}
+  }
+}

@@ -1,6 +1,6 @@
 Class = require('libs.hump.class')
 require('square')
-require('tree')
+-- require('tree')
 pretty = require('pl.pretty')
 require('scripts')
 
@@ -25,11 +25,11 @@ Scene = Class{
         self:add(v.name, Square(v))
       end
     end
-    if data.trees then 
-      for _,v in pairs(data.trees) do
-        self:add(v.name, Tree(v))
-      end
-    end
+    -- if data.trees then 
+    --   for _,v in pairs(data.trees) do
+    --     self:add(v.name, Tree(v))
+    --   end
+    -- end
     if data.collisionEvents then
       for _,v in pairs(data.collisionEvents) do
         self:registerCollisionEvent(v)
@@ -52,7 +52,6 @@ function Scene:remove( name )
 end
 
 function Scene:entered(player, previousSceneName)
-  print(previousSceneName)
   local e = self.entrances[previousSceneName]
   self:add(player.name, player)
   player.pos = vector(unpack(e.pos))
