@@ -1,0 +1,31 @@
+{
+  name = "beachblimp",
+	width = 700,
+	squares = {
+		{name = "fisherpit", pos = {400, 300}, size = 70, color = {0, 0, 255}},
+		{name = "skyblimp", pos = {-1000, 301}, size = 10000, color = {245, 245, 220}},
+    {name = "seacrab1", pos = {-100, 200}, size = 30,
+      [1] = {color = {255, 0, 0}},
+      [2] = {color = {255, 255, 255}}
+    },
+    {name = "seacrab2", pos = {100, 120}, size = 30,
+      [1] = {color = {255, 0, 0}},
+      [2] = {color = {255, 255, 255}}
+    },
+    {name = "seacrab3", pos = {500, 60}, size = 30,
+      [1] = {color = {255, 0, 0}},
+      [2] = {color = {255, 255, 255}}
+    },
+    {name = "seacrab4", pos = {600, 230}, size = 30,
+      [1] = {color = {255, 0, 0}},
+      [2] = {color = {255, 255, 255}}
+    }
+	},
+  entrances = {
+    {from = "default", pos = {0, 0}}
+  },
+  collisionEvents = {
+    {names = {"player1", "fisherpit"}, onCollide = "enterBlimp"},
+    {names = {"player1", "skyblimp"}, onColliding = "stopPlayer"}
+  }
+} 
