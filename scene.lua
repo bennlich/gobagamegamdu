@@ -1,5 +1,6 @@
 Class = require('libs.hump.class')
 require('square')
+require('tree')
 pretty = require('pl.pretty')
 
 Scene = Class{
@@ -11,8 +12,15 @@ Scene = Class{
     self.objects = {}
 
     self.width = data.width
-    for name,v in pairs(data.squares) do
-      self:add(name, Square(v))
+    if (data.squares) then 
+      for name,v in pairs(data.squares) do
+        self:add(name, Square(v))
+      end
+    end
+    if (data.trees) then 
+      for name,v in pairs(data.trees) do
+        self:add(name, Tree(v))
+      end
     end
   end
 }
