@@ -32,7 +32,6 @@ function switchScene(name)
   end
 
   activeScene = scenes[name]
-  debug.debug()
   activeScene:entered(player, previousName)
 end
 

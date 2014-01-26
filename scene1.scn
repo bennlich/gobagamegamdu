@@ -14,6 +14,9 @@
     {from = "default", pos = {100, 100}, onEnter = "welcomeToSc1"},
     {from = "scene2", pos = {900, 150}, onEnter = "welcomeBack"}
   },
+  trees = {
+    {name = "appleTree", pos = {100, 100}}
+  },
   collisionEvents = {
     {names = {"player1", "dog"}, onCollide = "doghit", onRelease = "release", onColliding = "indog"},
     {names = {"player1", "tower"}, onCollide = "turnred", onRelease = "unturnred"},

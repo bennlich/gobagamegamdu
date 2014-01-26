@@ -1,5 +1,6 @@
 Class = require('libs.hump.class')
 require('square')
+require('tree')
 pretty = require('pl.pretty')
 require('scripts')
 
@@ -18,9 +19,15 @@ Scene = Class{
 
     self.width = data.width
     self.name = data.name
+
     if data.squares then
       for _,v in pairs(data.squares) do
         self:add(v.name, Square(v))
+      end
+    end
+    if data.trees then 
+      for _,v in pairs(data.trees) do
+        self:add(v.name, Tree(v))
       end
     end
     if data.collisionEvents then
@@ -92,8 +99,8 @@ function Scene:processCollisions()
   for i=1,#self.sortedList do
     for j=i+1,#self.sortedList do
       obj1, obj2 = self.sortedList[i], self.sortedList[j]
-      local x1,y1,z1,s1,cd1 = obj1.pos.x, obj1.pos.y, obj1.elevation, obj1.size, obj1.collision_depth
-      local x2,y2,z2,s2,cd2 = obj2.pos.x, obj2.pos.y, obj2.elevation, obj2.size, obj2.collision_depth
+      local x1,y1,z1,s1,cd1 = obj1.pos.x, obj1.pos.y, obj1.elevation, obj1.size, obj1.thickness
+      local x2,y2,z2,s2,cd2 = obj2.pos.x, obj2.pos.y, obj2.elevation, obj2.size, obj2.thickness
 
       if x1 - s1/2  < x2 + s2/2 and
          x2 - s2/2  < x1 + s1/2 and
