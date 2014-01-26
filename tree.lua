@@ -24,13 +24,13 @@ Tree = Class{__includes=Loadable,
     --init leaves
     self.leaves = {
       Leaf(self, vector(self.trunkWidth/2,0),
-        self.size*100, (1/2)*self.size*100, fruitsPerLeaf),
+        self.size*100, (1/2)*self.size*100, self.fruitsPerLeaf),
       Leaf(self, vector(-(1/2)*self.trunkWidth-(1/4)*self.size*110,0),
-        self.size*110, (1/4)*self.size*110, fruitsPerLeaf),
+        self.size*110, (1/4)*self.size*110, self.fruitsPerLeaf),
       Leaf(self, vector(self.trunkWidth+(1/2)*self.size*80,0),
-        self.size*80, 0, fruitsPerLeaf),
+        self.size*80, 0, self.fruitsPerLeaf),
       Leaf(self, vector(-self.trunkWidth/2,0),
-        self.size*60, (7/3)*self.size*60, fruitsPerLeaf)
+        self.size*60, (7/3)*self.size*60, self.fruitsPerLeaf)
     }
   end
 }
