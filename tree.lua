@@ -18,10 +18,7 @@ Tree = Class{__includes=Loadable,
   },
   init = function(self, opts)
     Loadable.init(self, opts)
-    print('tree pos')
-    print(self.pos:unpack())
     --default opts
-    local fruitsPerLeaf = (opts and opts.fruitsPerLeaf) or 2.5
     self.trunkHeight = self.size * self.trunkHeight
     self.trunkWidth = self.size * self.trunkWidth
     --init leaves
