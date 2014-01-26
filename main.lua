@@ -27,7 +27,7 @@ function drawBG( )
   love.graphics.rectangle('fill', 0, (winHeight-camera.horizon), winWidth, 1000)
 end
 
-function love.draw(  )
+function love.draw() 
   drawBG()
   activeScene:draw(camera)
 end
