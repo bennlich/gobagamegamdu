@@ -10,22 +10,51 @@ Scene = Class{
 
     vstr = tostring(version)
     self.objects = {}
+    self.sortedList = {}
+    self.entrances = {}
     self.collisionRegistry = {}
     self.collidedThisFrame = {}
     self.collidedLastFrame = {}
 
     self.width = data.width
-    for _,v in pairs(data.squares) do
-      self:add(v.name, Square(v))
+    self.name = data.name
+    if data.squares then
+      for _,v in pairs(data.squares) do
+        self:add(v.name, Square(v))
+      end
     end
-    for _,v in pairs(data.collisionEvents) do
-      self:registerCollisionEvent(v)
+    if data.collisionEvents then
+      for _,v in pairs(data.collisionEvents) do
+        self:registerCollisionEvent(v)
+      end
+    end
+    if data.entrances then
+      for _,v in pairs(data.entrances) do
+        self.entrances[v.from] = v
+      end
     end
   end
 }
 
 function Scene:add(name, obj)
   self.objects[name] = obj
+end
+
+function Scene:remove( name )
+  if self.objects[name] then self.objects[name] = nil end
+end
+
+function Scene:entered(player, previousSceneName)
+  print(previousSceneName)
+  local e = self.entrances[previousSceneName]
+  self:add(player.name, player)
+  player.pos = vector(unpack(e.pos))
+  -- call entrance callback
+  if e.onEnter then scripts[e.onEnter]() end
+end
+
+function Scene:left(player)
+  self:remove(player.name)
 end
 
 function Scene:registerCollisionEvent(opts)
@@ -66,10 +95,10 @@ function Scene:processCollisions()
       local x1,y1,z1,s1,cd1 = obj1.pos.x, obj1.pos.y, obj1.elevation, obj1.size, obj1.collision_depth
       local x2,y2,z2,s2,cd2 = obj2.pos.x, obj2.pos.y, obj2.elevation, obj2.size, obj2.collision_depth
 
-      if x1 - s1/2 < x2 + s2/2 and
-         x2 - s2/2 < x1 + s1/2 and
-         y1 < y2 + cd2 and
-         y2 < y1 + cd1 and
+      if x1 - s1/2  < x2 + s2/2 and
+         x2 - s2/2  < x1 + s1/2 and
+         y1 - cd1/2 < y2 + cd2/2 and
+         y2 - cd2/2 < y1 + cd1/2 and
          z1 < z2 + s2 and
          z2 < z1 + s1 then
          self:collided(obj1, obj2)
