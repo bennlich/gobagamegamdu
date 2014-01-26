@@ -100,8 +100,6 @@ function Scene:processCollisions()
       obj1, obj2 = self.sortedList[i], self.sortedList[j]
       local x1,y1,z1,w1,d1,h1 = obj1:getCollisionRect()
       local x2,y2,z2,w2,d2,h2 = obj2:getCollisionRect()
-      -- local x1,y1,z1,w1,d1,h1 = obj1.pos.x, obj1.pos.y, obj1.elevation, obj1.size, obj1.depth, obj1.size
-      local x2,y2,z2,w2,d2,h2 = obj2.pos.x, obj2.pos.y, obj2.elevation, obj2.size, obj2.depth, obj1.size
 
       if x1 - w1/2  < x2 + w2/2 and
          x2 - w2/2  < x1 + w1/2 and
