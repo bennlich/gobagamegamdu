@@ -8,7 +8,8 @@ Square = Class{__includes=Loadable,
     size = 0,
     color = {0, 0, 0},
     elevation = 0,
-    collision_depth = 10
+    collision_depth = 10,
+    name = "missingno"
   }
 }
 
