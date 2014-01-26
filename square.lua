@@ -2,15 +2,17 @@ Class = require("libs.hump.class")
 
 require("loadable")
 require("label")
+require("util")
 
 Square = Class{__includes=Loadable,
   defaults = {
+    name = "missingno",
     pos = vector(0,0),
     size = 0,
     color = {0, 0, 0},
     elevation = 0,
-    thickness = 10,
-    name = "missingno"
+    depth = 10,
+    collisionRect = {}
   },
   init = function(self, opts)
     Loadable.init(self, opts)
@@ -20,6 +22,16 @@ Square = Class{__includes=Loadable,
     })
   end
 }
+
+function Square:getCollisionRect(  )
+  -- next() returns false if table is empty
+  if table.empty(self.collisionRect) then
+    return self.pos.x, self.pos.y, self.elevation, self.size, self.depth, self.size
+  else
+    return unpack(self.collisionRect)
+  end
+
+end
 
 function Square:update(dt)
 end

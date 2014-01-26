@@ -26,6 +26,7 @@
   },
   collisionEvents = {
     {names = {"player1", "fisherpit"}, onCollide = "enterBlimp"},
-    {names = {"player1", "skyblimp"}, onColliding = "stopPlayer"}
+    {names = {"player1", "skyblimp"}, onColliding = "stopPlayer"},
+    {names = {"player1", "seacrab1"}, onCollide = "debugOn", onRelease = "debugOff"}
   }
 } 
