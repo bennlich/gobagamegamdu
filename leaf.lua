@@ -6,8 +6,8 @@ vector = require("libs.hump.vector")
 Leaf = Class{__includes=Square,
 	init = function(self, tree, posOffset, size, elevationOffset, numFruits)
 		
+    --init leaf
 		local leafColor = { 0, 200, 50 }
-
 		Square.init(self, {
       pos = tree.pos+posOffset,
       size = size,
