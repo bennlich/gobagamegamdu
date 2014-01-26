@@ -1,13 +1,16 @@
 {
-	width = 1000,
-	squares = {
-		{name = "tower", pos = {500, 400}, size = 400, color = {255, 255, 255}},
-		{name = "bob", pos = {100, 10}, size = 50, color = {245, 245, 220}},
-		{name = "dog", pos = {700, 10}, size = 10, 
-      [1] = {color = {150, 75, 0}},
-      [2] = {color = {10, 90, 0}}
-    }
-	},
+  width = 1000,
+  squares = {
+    {name = "tower", pos = {500, 400}, size = 400, color = {255, 255, 255}},
+    {name = "bob", pos = {100, 10}, size = 50, color = {245, 245, 220}},
+    {name = "dog", pos = {700, 10}, size = 10, 
+        [1] = {color = {150, 75, 0}},
+        [2] = {color = {10, 90, 0}}
+      }
+  },
+  trees = {
+    {name = "appleTree", pos = {100, 100}}
+  },
   collisionEvents = {
     {names = {"player1", "dog"}, onCollide = "doghit", onRelease = "release", onColliding = "indog"},
     {names = {"player1", "tower"}, onCollide = "turnred", onRelease = "unturnred"}
