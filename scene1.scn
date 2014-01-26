@@ -1,18 +1,25 @@
 {
-  width = 1000,
-  squares = {
-    {name = "tower", pos = {500, 400}, size = 400, color = {255, 255, 255}},
-    {name = "bob", pos = {100, 10}, size = 50, color = {245, 245, 220}},
-    {name = "dog", pos = {700, 10}, size = 10, 
-        [1] = {color = {150, 75, 0}},
-        [2] = {color = {10, 90, 0}}
-      }
+  name = "scene1",
+	width = 1000,
+	squares = {
+		{name = "tower", pos = {500, 400}, size = 400, color = {255, 255, 255}},
+		{name = "bob", pos = {100, 10}, size = 50, color = {245, 245, 220}},
+		{name = "dog", pos = {700, 50}, size = 10, 
+      [1] = {color = {150, 75, 0}},
+      [2] = {color = {10, 90, 0}}
+    },
+    {name = "door", pos = {900, 150}, size = 100, color = {200, 200, 0}}
+	},
+  entrances = {
+    {from = "default", pos = {100, 100}, onEnter = "welcomeToSc1"},
+    {from = "scene2", pos = {900, 150}, onEnter = "welcomeBack"}
   },
   trees = {
     {name = "appleTree", pos = {100, 100}}
   },
   collisionEvents = {
     {names = {"player1", "dog"}, onCollide = "doghit", onRelease = "release", onColliding = "indog"},
-    {names = {"player1", "tower"}, onCollide = "turnred", onRelease = "unturnred"}
+    {names = {"player1", "tower"}, onCollide = "turnred", onRelease = "unturnred"},
+    {names = {"player1", "door"}, onCollide = "loadNextScene"}
   }
 }

@@ -1,0 +1,14 @@
+{
+  name = "scene2",
+	width = 700,
+	squares = {
+		{name = "mountain", pos = {100, 100}, size = 300, color = {255, 255, 255}},
+		{name = "bob", pos = {100, 10}, size = 50, color = {245, 245, 220}}
+	},
+  entrances = {
+    {from = "scene1", pos = {400, 400}}
+  },
+  collisionEvents = {
+    {names = {"mountain", "player1"}, onCollide = "gotoscene1"}
+  }
+} 

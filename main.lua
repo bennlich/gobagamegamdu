@@ -13,14 +13,26 @@ function love.load()
   player = Player({pos = vector(30, 30), size = 50, color = {20, 30, 160}, 
                   name = "player" .. tostring(world_vers)})
   camera = Camera(player, winHeight/2)
-  scene1 = Scene("scene1")
-  activeScene = scene1
-  activeScene:add("player", player)
+  scenes = {}
+  switchScene("scene1")
 end
 
 function love.update( dt )
   input.update(dt)
   activeScene:update(dt)
+end
+
+function switchScene(name)
+  if not scenes[name] then scenes[name] = Scene(name) end
+  local previousScene = activeScene
+  local previousName = "default"
+  if previousScene then 
+    previousScene:left(player) 
+    previousName = previousScene.name
+  end
+
+  activeScene = scenes[name]
+  activeScene:entered(player, previousName)
 end
 
 function drawBG( )
