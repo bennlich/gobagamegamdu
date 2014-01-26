@@ -49,8 +49,8 @@ function Scene:processCollisions()
       local x1,y1,z1,s1,cd1 = obj1.pos.x, obj1.pos.y, obj1.elevation, obj1.size, obj1.collision_depth
       local x2,y2,z2,s2,cd2 = obj2.pos.x, obj2.pos.y, obj2.elevation, obj2.size, obj2.collision_depth
 
-      if x1 < x2 + s2 and
-         x2 < x1 + s1 and
+      if x1 - s1/2 < x2 + s2/2 and
+         x2 - s2/2 < x1 + s1/2 and
          y1 < y2 + cd2 and
          y2 < y1 + cd1 and
          z1 < z2 + s2 and
@@ -62,5 +62,5 @@ function Scene:processCollisions()
 end
 
 function Scene:collided( obj1, obj2 )
-  
+  print('howdy')
 end
