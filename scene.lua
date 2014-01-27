@@ -9,7 +9,6 @@ Scene = Class{
     io.input("resources/"..filename..".scn")
     local data = pretty.read(io.read("*all"))
 
-    vstr = tostring(version)
     self.objects = {}
     self.sortedList = {}
     self.entrances = {}
