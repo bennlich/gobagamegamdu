@@ -32,16 +32,23 @@
     {name = "car2", pos = {1100, 130}, size = 100, 
       color = 'magenta', label = 'Car', behavior = {'moveLeft', 'wrapX'},
       other = {xVel = 6}},
-    {name = "dog", pos = {200, 300}, size = 30,
+    {name = "player2", pos = {100, 10}, size = 100, 
+      color = 'magenta', label = 'Him'},
+    {name = "chameleon", pos = {200, 300}, size = 30,
       color = 'orange', label = 'Dog', behavior = {'follow'},
       other = {target = 'player1', followDist = 100, maxVel = 5}},
+    {name = "interactionCube", collisionRect={100,50,0,100,100,100}}
+  },
+  dialogs = {
+    {name = "chameleonDialog", filename = "chameleon"}
   },
   entrances = {
     {from = "breakfast", pos = {100, 500}},
     {from = "default", pos = {100, 50}}
   },
   collisionEvents = {
-    {names = {"player", "building"}, onColliding="stopPlayer"},
+    {names = {"player", "interactionCube"}, onColliding = "dialogTest"},
+    {names = {"player", "building"}, onColliding = "stopPlayer"},
     {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
     {names = {"player", "edgeRight"}, onCollide = "goToBlockCity2"},
     {names = {"player", "edgeLeft"}, onCollide = "goToTower"},
