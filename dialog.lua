@@ -1,3 +1,6 @@
+Pretty = require("pl.pretty")
+require("util")
+
 Dialog = Class{
 	init = function(self, filename, scene)
 		io.input("resources/"..filename..".dialog")
@@ -11,8 +14,7 @@ Dialog = Class{
 }
 
 function Dialog:next()
-	-- local curDialog = self.dialog[self.index]
-	local nextMessage = next(self.nextDialog.content)
+	nextMessage = table.next(self.nextDialog.content)
 	if (nextMessage) then
 		self.activeChar.label:setContent(nextMessage)
 		return nextMessage
@@ -23,6 +25,6 @@ function Dialog:next()
 end
 
 function Dialog:nextChar()
-	self.nextDialog = next(self.data[1])
+	self.nextDialog = table.next(self.data)
 	self.activeChar = self.scene.objects[self.nextDialog.name]
 end
