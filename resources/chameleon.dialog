@@ -1,0 +1,70 @@
+{
+	{ name = "chameleon", content = {
+		"Shmurgggh... looks like I'm cornered.",
+		"What'll it be then?"
+	} },
+	{ name = "player1", content = {
+		"Huh?"
+	} },
+	{ name = "chameleon", content = {
+		"You've got me.",
+		"Trapped.",
+		"Fair and square.",
+		"So now is the time when you tell me",
+		"what is it you're after?"
+	} },
+	{ name = "player1", content = {
+		"Well,"
+	} },
+	{ name = "player2", content = {
+		"Um,"
+	} },
+	{ name = "chameleon", content = {
+		"I'm surprised you could see me.",
+		"Most can't.",
+		"Good pair of eyes on you bunch."
+	} },
+	{ name = "player1", content = {
+		"Does this place have a name?",
+		"Where are we?"
+	} },
+	{ name = "chameleon", content = {
+		"Mmm.",
+		"Foreigners. Lost your way.",
+		"Not to worry.",
+		"Nothing around here will hurt you.",
+		"Out with it though.",
+		"What are you looking for?"
+	} },
+	{ name = "player2", content = {
+		"Looking for...",
+		"Hmm. Nothing, I guess."
+	} },
+	{ name = "chameleon", content = {
+		"Oh."
+	} },
+	{ name = "chameleon", content = {
+		"Well I'll be on my way then."
+	}, onTrigger = "chameleonBeginsExit" },
+	{ name = "player1", content = {
+		"Wait! What about--",
+		"What was that noise Mom made at the end of the story?"
+	} },
+	{ name = "player2", content = {
+		""
+	}, onTrigger = "player2MakesFunnyNoises" },
+	{ name = "player1", content = {
+		"Have you ever heard that?"
+	} },
+	{ name = "chameleon", content = {
+		"No.",
+		"Haven't.",
+		"Oh well.",
+		"Best of luck and all that.",
+		"You might try the Stargazer?",
+		"He seems to know the things he hears."
+	} },
+	{ name = "chameleon", content = {
+		""
+	}, onTrigger = "chameleonExits" }
+}
