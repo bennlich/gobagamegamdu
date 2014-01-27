@@ -32,9 +32,9 @@ function scripts.playerHitFisherpit( scene, player, fisherpit )
   end
 end
 
-function scripts.curseAtPlayer( scene, player, bicycle )
+function scripts.curseAtPlayer( scene, player, curser )
   local curses = {"@#@$^#?!", "@$#%&*!", "?!?!?!?", "&*#@!"}
-  bicycle.label:setContent(curses[math.random(1, #curses)])
+  curser.label:setContent(curses[math.random(1, #curses)])
 end
 
 function scripts.goToTower( scene, player, bicycle )
@@ -51,7 +51,7 @@ end
 
 function scripts.spawnBirds( scene, player )
   numBirds = 1
-  local c = cron.every(5, function( )
+  local function spawnOne()
     local name = "bird"..tostring(numBirds)
     local birdY = 0
     local offset = camera:getEdgeOffset(birdY)
@@ -63,8 +63,13 @@ function scripts.spawnBirds( scene, player )
       }
     )
     numBirds = numBirds+1
+  end
+  local c = cron.after(2.5, function()
+    spawnOne()
+    local repeatSpawn = cron.every(5, spawnOne)
+    scene:addClock(repeatSpawn)
   end)
-  table.insert(scene.clocks, c)
+  scene:addClock(c)
 end
 
 function scripts.birdBounce( scene, bird, tower )
@@ -77,4 +82,27 @@ function scripts.birdBounce( scene, bird, tower )
     bird.label:setContent("Dead Bird")
   end)
   bird.behavior = {}
+end
+
+function scripts.kidBounce( scene, kid, tower )
+  local time = 0.5
+  local waitTime = 2
+  local oldBehavior = kid.behavior
+  local oldLabelContent = kid.label.content
+  kid.behavior = {}
+  tween(time, kid.pos, {x=kid.pos.x-70})
+  tween(time/2, kid, {elevation = 30}, 'outQuad', function()
+    tween(time/2, kid, {elevation = 0}, 'inQuad', function()
+      scripts.curseAtPlayer(scene, player, kid)
+      local c = cron.after(waitTime, function()
+        kid.behavior = oldBehavior
+        kid.label:setContent(oldLabelContent)
+      end)
+      scene:addClock(c)
+    end)
+  end)
+end
+
+function scripts.kidScram( scene, player )
+  print("scram, kids!")
 end

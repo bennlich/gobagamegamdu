@@ -12,6 +12,7 @@
     {name = "kid3", pos = {790, 50}, size = 40, 
       color = 'turquoise', label = 'Kid', behavior = {'moveRight'},
       other = {xVel = 3}},
+    {name = "kidScramEvent", collisionRect={700, 500, 0, 400, 1000, 1}},
 
     {name = "towerBottom", pos = {1000, 0}, size=150, depth=500, 
       color='white', border={thickness=3, color='black'}},
@@ -21,12 +22,13 @@
       shadow='false', color='white', border={thickness=3, color='black'}},
   },
   entrances = {
-    {from="blockcity1", pos={700, 50}, onEnter="spawnBirds"}
+    {from="blockcity1", pos={0, 50}, onEnter="spawnBirds"}
   },
   collisionEvents = {
-    {names = {"kid", "tower"}, onColliding="stopObj1"},
+    {names = {"kid", "tower"}, onCollide="kidBounce"},
     {names = {"player", "kid"}, onColliding="stopObj1"},
     {names = {"player", "tower"}, onColliding="stopObj1"},
     {names = {"bird", "tower"}, onCollide="birdBounce"},
+    {names = {"player", "kidScramEvent"}, onCollide="kidScram"},
   }
 }

@@ -54,6 +54,10 @@ function Scene:remove( name )
   if self.objects[name] then self.objects[name] = nil end
 end
 
+function Scene:addClock( clock )
+  table.insert(self.clocks, clock)
+end
+
 function Scene:entered(player, previousSceneName)
   local e = self.entrances[previousSceneName]
   self:add(player.name, player)
@@ -80,8 +84,9 @@ function Scene:update( dt )
   for _,v in pairs(self.objects) do 
     v:update(dt, self)
   end
-  for _,v in pairs(self.clocks) do
-    v:update(dt)
+  for k,v in pairs(self.clocks) do
+    local expired = v:update(dt)
+    if expired then self.clocks[k] = nil end
   end
   self.sortedList = {}
   for k,v in pairs(self.objects) do
