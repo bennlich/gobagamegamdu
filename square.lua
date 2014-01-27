@@ -91,7 +91,10 @@ function Square:draw(camera)
   end
   love.graphics.pop()
 
-  if self.label then self.label:draw(camera) end
+  if self.label then 
+    -- print(self.label.content)
+    self.label:draw(camera) 
+  end
 end
 
 function Square:drawShadow(camera)

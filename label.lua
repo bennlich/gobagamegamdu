@@ -10,13 +10,10 @@ Label = Class{__includes=Loadable,
     base = {},
     content = "",
     width = 0,
+    pos = {0,0},
     elevationOffset = 15,
     color = {0,0,0}
   },
-  init = function(self, opts)
-    Loadable.init(self, opts)
-    self.pos = self.pos or vector(0, 0)
-  end, 
   triWidth = 15, triHeight = 10, 
   borderColor = {128,130,133},
   fillColor = colors.white,
@@ -28,7 +25,7 @@ Label = Class{__includes=Loadable,
 function Label.loadFont( )
   Label.font = love.graphics.newFont("resources/SourceCodePro-Light.ttf", 18)
 end
-
+  
 function Label:getTextDimensions(  )
   if self.width == 0 then
     return self.font:getWidth(self.content), self.font:getHeight()

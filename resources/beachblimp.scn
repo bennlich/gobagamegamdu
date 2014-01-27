@@ -1,40 +1,43 @@
 {
   name = "beachblimp",
-	width = 700,
+  width = 800,
   horizon = 1.0,
-	squares = {
-		{name = "fisherpit", pos = {400, 300}, size = 70, color = 'darkBlue', shadow='off',
+  squares = {
+    {name = "fisherpit", pos = {500, 300}, size = 70, color = 'darkBlue', shadow='off',
       [1] = {label = "Fisherman"},
       [2] = {label = "Cockpit"}
     },
-		{name = "skyblimp", pos = {-1000, 301}, size = 10000, 
+    {name = "skyblimp", pos = {400, 301}, size = 1200, 
       color = {'gray',128}, shadow='off',
-      border = {color = 'gray', thickness=2}},
-    {name = "seacrab1", pos = {-100, 200}, size = 30,
-      [1] = {color = 'red'},
-      [2] = {color = 'white', border={color = 'gray'}}
+      border = {color = 'gray', thickness=2},
+      [1] = {label = {content = "Sky", elevationOffset = -750, pos = {-300,0}}},
+      [2] = {label = {content = "Blimp", elevationOffset = -750, pos = {-300,0}}},
     },
-    {name = "seacrab2", pos = {100, 120}, size = 30,
-      [1] = {color = 'red'},
-      [2] = {color = 'white', border={color = 'gray'}}
+    {name = "seacrab1", pos = {0, 200}, size = 30,
+      [1] = {color = 'red', label='Crab'},
+      [2] = {color = 'white', label='Seagull', border={color = 'gray'}}
     },
-    {name = "seacrab3", pos = {500, 60}, size = 30,
-      [1] = {color = 'red'},
-      [2] = {color = 'white', border={color = 'gray'}}
+    {name = "seacrab2", pos = {200, 120}, size = 30,
+      [1] = {color = 'red', label='Crab'},
+      [2] = {color = 'white', label='Seagull', border={color = 'gray'}}
     },
-    {name = "seacrab4", pos = {600, 230}, size = 30,
-      [1] = {color = 'red'},
-      [2] = {color = 'white', border={color = 'gray'}}
+    {name = "seacrab3", pos = {600, 60}, size = 30,
+      [1] = {color = 'red', label='Crab'},
+      [2] = {color = 'white', label='Seagull', border={color = 'gray'}}
+    },
+    {name = "seacrab4", pos = {700, 230}, size = 30,
+      [1] = {color = 'red', label='Crab'},
+      [2] = {color = 'white', label='Seagull', border={color = 'gray'}}
     }
-	},
+  },
   entrances = {
-    {from = "default", pos = {0, 0}}
+    {from = "default", pos = {100, 50}}
   },
   collisionEvents = {
     {names = {"player2", "fisherpit"}, onCollide = "enterBlimp"},
     {names = {"player1", "fisherpit"}, onCollide = "changeLabel"},
-    {names = {"player1", "skyblimp"}, onColliding = "stopPlayer"},
-    {names = {"player2", "skyblimp"}, onColliding = "stopPlayer"},
-    {names = {"player1", "seacrab1"}, onCollide = "debugOn", onRelease = "debugOff"}
+    {names = {"player", "skyblimp"}, onColliding = "stopPlayer"},
+    {names = {"player", "seacrab"}, onColliding = "stopPlayer"},
+    {names = {"player", "edgeRight"}, onCollide = "enterBlimp"}
   }
 } 

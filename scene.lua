@@ -73,8 +73,9 @@ function doghit()
 end
 
 function Scene:update( dt )
+  self:resetCollisions()
   for _,v in pairs(self.objects) do 
-    v:update(dt)
+    v:update(dt, self)
   end
   self.sortedList = {}
   for k,v in pairs(self.objects) do
@@ -97,10 +98,12 @@ function Scene:draw(camera)
   end
 end
 
-function Scene:processCollisions()
+function Scene:resetCollisions()
   self.collidedLastFrame = self.collidedThisFrame
   self.collidedThisFrame = {}
+end
 
+function Scene:processCollisions()
   for i=1,#self.sortedList do
     for j=i+1,#self.sortedList do
       obj1, obj2 = self.sortedList[i], self.sortedList[j]
@@ -140,10 +143,10 @@ end
 function Scene:collided(obj1, obj2)
   -- See if this collision matches anything in the collision registry
   for _,v in ipairs(self.collisionRegistry) do
-    if (obj1.name == v.names[1] and obj2.name == v.names[2]) or
-       (obj1.name == v.names[2] and obj2.name == v.names[1]) then
+    if (obj1.name:find(v.names[1]) and obj2.name:find(v.names[2])) or
+       (obj1.name:find(v.names[2]) and obj2.name:find(v.names[1])) then
        -- If needed, swap to make sure obj1 == name1
-       if obj1.name ~= v.names[1] then 
+       if not obj1.name:find(v.names[1]) then 
           local temp = obj1
           obj1 = obj2
           obj2 = temp

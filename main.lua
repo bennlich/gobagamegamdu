@@ -12,8 +12,8 @@ function love.load()
   love.graphics.setBackgroundColor( 255, 255, 255 ) 
   Label.loadFont()
 
-  world_vers = 2
-  player = Player({pos = vector(30, 30), size = 50, color = {20, 30, 160}, 
+  world_vers = 1
+  player = Player({size = 50, color = 'yellowGreen', 
                   name = "player" .. tostring(world_vers), label="You"})
   scenes = {}
   switchScene("beachblimp")
