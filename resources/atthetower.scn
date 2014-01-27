@@ -1,8 +1,32 @@
 {
-  name="name",
-  width=800,
-  horizon = 1.0,
-  squares = {},
-  entrances = {},
-  collisionEvents = {}
+  name="atthetower",
+  width=2000,
+  horizon = 0.6,
+  squares = {
+    {name = "kid1", pos = {750, 240}, size = 40, 
+      color = 'turquoise', label = 'Kid', behavior = {'moveRight'},
+      other = {xVel = 4}},
+    {name = "kid2", pos = {690, 100}, size = 40, 
+      color = 'turquoise', label = 'Kid', behavior = {'moveRight'},
+      other = {xVel = 2}},
+    {name = "kid3", pos = {790, 50}, size = 40, 
+      color = 'turquoise', label = 'Kid', behavior = {'moveRight'},
+      other = {xVel = 3}},
+
+    {name = "towerBottom", pos = {1000, 0}, size=150, depth=500, 
+      color='white', border={thickness=3, color='black'}},
+    {name = "towerMiddle", pos = {1000, 0}, size=130, elevation=150, depth=500, 
+      shadow='false', color='white', border={thickness=3, color='black'}},
+    {name = "towerTop", pos = {1000, 0}, size=110, elevation=280, depth=500,
+      shadow='false', color='white', border={thickness=3, color='black'}},
+  },
+  entrances = {
+    {from="blockcity1", pos={700, 50}, onEnter="spawnBirds"}
+  },
+  collisionEvents = {
+    {names = {"kid", "tower"}, onColliding="stopObj1"},
+    {names = {"player", "kid"}, onColliding="stopObj1"},
+    {names = {"player", "tower"}, onColliding="stopObj1"},
+    {names = {"bird", "tower"}, onCollide="birdBounce"},
+  }
 }

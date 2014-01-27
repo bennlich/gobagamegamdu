@@ -1,5 +1,6 @@
 input = require("input")
 vector = require("libs.hump.vector")
+tween = require("libs.tween")
 require("square")
 require("player")
 require("camera")
@@ -12,7 +13,7 @@ function love.load()
   love.graphics.setBackgroundColor( 255, 255, 255 ) 
   Label.loadFont()
 
-  world_vers = 1
+  world_vers = 2
   player = Player({size = 50, color = 'yellowGreen', 
                   name = "player" .. tostring(world_vers), label="You"})
   scenes = {}
@@ -21,6 +22,7 @@ end
 
 function love.update( dt )
   input.update(dt)
+  tween.update(dt)
   -- if input.wasJustPressed('space') then 
   --   if world_vers == 1 then world_vers = 2
   --   elseif world_vers == 2 then world_vers = 1  end

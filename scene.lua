@@ -3,6 +3,7 @@ require('square')
 require('tree')
 pretty = require('pl.pretty')
 require('resources.scripts')
+cron = require('libs.cron')
 
 Scene = Class{
   init = function(self, filename)
@@ -12,6 +13,7 @@ Scene = Class{
     vstr = tostring(version)
     self.objects = {}
     self.sortedList = {}
+    self.clocks = {}
     self.entrances = {}
     self.collisionRegistry = {}
     self.collidedThisFrame = {}
@@ -57,11 +59,12 @@ function Scene:entered(player, previousSceneName)
   self:add(player.name, player)
   player.pos = vector(unpack(e.pos))
   -- call entrance callback
-  if e.onEnter then scripts[e.onEnter]() end
+  if e.onEnter then scripts[e.onEnter](self, player) end
 end
 
 function Scene:left(player)
   self:remove(player.name)
+  self.clocks = {}
 end
 
 function Scene:registerCollisionEvent(opts)
@@ -76,6 +79,9 @@ function Scene:update( dt )
   self:resetCollisions()
   for _,v in pairs(self.objects) do 
     v:update(dt, self)
+  end
+  for _,v in pairs(self.clocks) do
+    v:update(dt)
   end
   self.sortedList = {}
   for k,v in pairs(self.objects) do

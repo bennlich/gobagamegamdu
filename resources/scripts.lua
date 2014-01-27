@@ -1,3 +1,4 @@
+cron = require("libs.cron")
 scripts = {}
 
 function scripts.stopObj1( scene, obj1, obj2, penAmt, penDir)
@@ -7,9 +8,9 @@ function scripts.stopObj1( scene, obj1, obj2, penAmt, penDir)
   elseif penDir == 'right' then 
     obj1.pos.x = obj1.pos.x + penAmt
   elseif penDir == 'top' then 
-    obj1.pos.z = obj1.pos.z + penAmt
+    obj1.elevation = obj1.elevation + penAmt
   elseif penDir == 'bottom' then 
-    obj1.pos.z = obj1.pos.z - penAmt
+    obj1.elevation = obj1.elevation - penAmt
   elseif penDir == 'front' then 
     obj1.pos.y = obj1.pos.y - penAmt
   elseif penDir == 'back' then 
@@ -17,21 +18,18 @@ function scripts.stopObj1( scene, obj1, obj2, penAmt, penDir)
   end
 end
 
-function scripts.enterBlimp( scene, player, obstacle )
-  switchScene("blimp")
-end
-
-function scripts.changeLabel( scene, player, fisherman )
-  fisherman.label:setContent("dicks")
-end
-
-function scripts.debugOn( scene, player, obstacle )
-  oldColor = player.color
-  player.color = {255, 0, 0}
-end
-
-function scripts.debugOff( scene, player, obstacle )
-  player.color = oldColor
+function scripts.playerHitFisherpit( scene, player, fisherpit )
+  -- if scene.objects["dog"] and fisherpit.inAir then
+  if not fisherpit.inAir then
+    -- Blimp takes off
+    fisherpit.inAir = true
+    local blimp = scene.objects["skyblimp"]
+    local time, easing = 8, 'inQuad'
+    tween(time, blimp, {pos=vector(blimp.pos.x+1000,blimp.pos.y), elevation = 800}, easing)
+    tween(time, fisherpit, {pos=vector(blimp.pos.x+1000,blimp.pos.y), elevation = 800}, easing)
+  else
+    switchScene("blimp")
+  end
 end
 
 function scripts.curseAtPlayer( scene, player, bicycle )
@@ -39,6 +37,44 @@ function scripts.curseAtPlayer( scene, player, bicycle )
   bicycle.label:setContent(curses[math.random(1, #curses)])
 end
 
+function scripts.goToTower( scene, player, bicycle )
+  switchScene("atthetower")
+end
+
+function scripts.goToBeachBlimp( scene, player, bicycle )
+  switchScene("beachblimp")
+end
+
 function scripts.goToBlockCity2( scene, player, bicycle )
   switchScene("blockcity2")
+end
+
+function scripts.spawnBirds( scene, player )
+  numBirds = 1
+  local c = cron.every(5, function( )
+    local name = "bird"..tostring(numBirds)
+    local birdY = 0
+    local offset = camera:getEdgeOffset(birdY)
+    local birdSize = 20
+    scene:add(name, Square{
+      name = name, pos = {offset-birdSize/2, birdY}, elevation = 300+math.random(0,90), size=birdSize,
+      label = "Bird", color='white', border={thickness=2, color='gray'}, 
+      behavior = {'moveRight'}, other = {xVel = 4}
+      }
+    )
+    numBirds = numBirds+1
+  end)
+  table.insert(scene.clocks, c)
+end
+
+function scripts.birdBounce( scene, bird, tower )
+  -- Could also bounce off
+  if bird.bounced == true then return end
+  bird.bounced = true
+  local time = 1.5
+  tween(time, bird.pos, {x = bird.pos.x-math.random(50, 150), y = bird.pos.y+math.random(0, 100)})
+  tween(time, bird, {elevation = 0}, 'outBounce', function( )
+    bird.label:setContent("Dead Bird")
+  end)
+  bird.behavior = {}
 end
