@@ -17,3 +17,9 @@ function table.concatArrays( ... )
   return t
 end
 
+nextTable={}
+function table.next(data)
+  local ret = {}
+  nextTable[data], ret = next(data, nextTable[data])
+  return ret
+end
