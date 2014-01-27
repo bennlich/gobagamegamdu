@@ -4,17 +4,19 @@ require("square")
 require("player")
 require("camera")
 require("scene")
+require("label")
 
 function love.load()
   winWidth, winHeight = love.window.getDimensions()
   input.register()
+  love.graphics.setBackgroundColor( 255, 255, 255 ) 
+  Label.loadFont()
 
-  world_vers = 1
+  world_vers = 2
   player = Player({pos = vector(30, 30), size = 50, color = {20, 30, 160}, 
-                  name = "player" .. tostring(world_vers)})
+                  name = "player" .. tostring(world_vers), label="You"})
   scenes = {}
   switchScene("beachblimp")
-  camera = Camera(player, activeScene.horizon*winHeight)
 end
 
 function love.update( dt )
@@ -37,16 +39,19 @@ function switchScene(name)
   end
 
   activeScene = scenes[name]
+  camera = Camera(player, activeScene.horizon*winHeight)
   activeScene:entered(player, previousName)
 end
 
-function drawBG( )
-  love.graphics.setColor(128, 128, 128)
-  love.graphics.rectangle('fill', 0, (winHeight-camera.horizon), winWidth, 1000)
+function drawHorizonLine( )
+  love.graphics.setColor(146,149,151)
+  love.graphics.setLineWidth(1)
+  love.graphics.setLineStyle('rough')
+  love.graphics.line(0, camera.horizon, winWidth, camera.horizon)
 end
 
 function love.draw() 
-  drawBG()
+  drawHorizonLine()
   activeScene:draw(camera)
 end
 

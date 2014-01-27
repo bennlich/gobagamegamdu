@@ -1,8 +1,0 @@
-{
-	name = "blimp",
-  width = 1000,
-  horizon = 0.5,
-  entrances = {
-    {from = "beachblimp", pos = {0, 0}}
-  }
-}

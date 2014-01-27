@@ -1,0 +1,40 @@
+{
+  name = "beachblimp",
+	width = 700,
+  horizon = 1.0,
+	squares = {
+		{name = "fisherpit", pos = {400, 300}, size = 70, color = 'darkBlue', shadow='off',
+      [1] = {label = "Fisherman"},
+      [2] = {label = "Cockpit"}
+    },
+		{name = "skyblimp", pos = {-1000, 301}, size = 10000, 
+      color = {'gray',128}, shadow='off',
+      border = {color = 'gray', thickness=2}},
+    {name = "seacrab1", pos = {-100, 200}, size = 30,
+      [1] = {color = 'red'},
+      [2] = {color = 'white', border={color = 'gray'}}
+    },
+    {name = "seacrab2", pos = {100, 120}, size = 30,
+      [1] = {color = 'red'},
+      [2] = {color = 'white', border={color = 'gray'}}
+    },
+    {name = "seacrab3", pos = {500, 60}, size = 30,
+      [1] = {color = 'red'},
+      [2] = {color = 'white', border={color = 'gray'}}
+    },
+    {name = "seacrab4", pos = {600, 230}, size = 30,
+      [1] = {color = 'red'},
+      [2] = {color = 'white', border={color = 'gray'}}
+    }
+	},
+  entrances = {
+    {from = "default", pos = {0, 0}}
+  },
+  collisionEvents = {
+    {names = {"player2", "fisherpit"}, onCollide = "enterBlimp"},
+    {names = {"player1", "fisherpit"}, onCollide = "changeLabel"},
+    {names = {"player1", "skyblimp"}, onColliding = "stopPlayer"},
+    {names = {"player2", "skyblimp"}, onColliding = "stopPlayer"},
+    {names = {"player1", "seacrab1"}, onCollide = "debugOn", onRelease = "debugOff"}
+  }
+} 

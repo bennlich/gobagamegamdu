@@ -6,7 +6,7 @@ require('scripts')
 
 Scene = Class{
   init = function(self, filename)
-    io.input(filename..".scn")
+    io.input("resources/"..filename..".scn")
     local data = pretty.read(io.read("*all"))
 
     vstr = tostring(version)
@@ -87,6 +87,11 @@ function Scene:update( dt )
 end
 
 function Scene:draw(camera)
+  for i,v in ipairs(self.sortedList) do
+    if v.shadow and v.shadow=='on' then 
+      v:drawShadow(camera) 
+    end
+  end
   for i,v in ipairs(self.sortedList) do
     v:draw(camera)
   end

@@ -1,10 +1,7 @@
-triWidth, triHeight = 10, 10
-boxWidth, boxHeight = 200, 100
-
 function dialogbox.draw(  )
+  local triWidth, triHeight = 10, 10
   love.graphics.setLineWidth(5)
   love.graphics.setLineStyle("smooth")
-  love.graphics.translate(100,100)
 
   local vertices = {
     0, 0,

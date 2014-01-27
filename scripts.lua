@@ -12,6 +12,10 @@ function scripts.enterBlimp( scene, player, obstacle )
   switchScene("blimp")
 end
 
+function scripts.changeLabel( scene, player, fisherman )
+  fisherman.label:setContent("dicks")
+end
+
 function scripts.debugOn( scene, player, obstacle )
   oldColor = player.color
   player.color = {255, 0, 0}
