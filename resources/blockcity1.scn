@@ -29,8 +29,8 @@
     {from = "default", pos = {100, 50}}
   },
   collisionEvents = {
-    {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopPlayer"},
+    {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
     {names = {"player", "edgeRight"}, onCollide = "goToBlockCity2"},
-    {names = {"player", "car"}, onCollide = "curseAtPlayer", onColliding="stopPlayer"},
+    {names = {"player", "car"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
   }
 }

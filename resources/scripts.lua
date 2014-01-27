@@ -1,19 +1,19 @@
 scripts = {}
 
-function scripts.stopPlayer( scene, player, obstacle, penAmt, penDir)
+function scripts.stopObj1( scene, obj1, obj2, penAmt, penDir)
   -- Todo write a script that converts "penDir" into modulations of vector
   if penDir == 'left' then 
-    player.pos.x = player.pos.x - penAmt
+    obj1.pos.x = obj1.pos.x - penAmt
   elseif penDir == 'right' then 
-    player.pos.x = player.pos.x + penAmt
+    obj1.pos.x = obj1.pos.x + penAmt
   elseif penDir == 'top' then 
-    player.pos.z = player.pos.z + penAmt
+    obj1.pos.z = obj1.pos.z + penAmt
   elseif penDir == 'bottom' then 
-    player.pos.z = player.pos.z - penAmt
+    obj1.pos.z = obj1.pos.z - penAmt
   elseif penDir == 'front' then 
-    player.pos.y = player.pos.y - penAmt
+    obj1.pos.y = obj1.pos.y - penAmt
   elseif penDir == 'back' then 
-    player.pos.y = player.pos.y + penAmt
+    obj1.pos.y = obj1.pos.y + penAmt
   end
 end
 
