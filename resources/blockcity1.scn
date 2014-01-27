@@ -21,12 +21,15 @@
     {name = "car2", pos = {1100, 100}, size = 100, 
       color = 'magenta', label = 'Car', behavior = {'moveLeft', 'wrapX'},
       other = {xVel = 6}},
+    {name = "dog", pos = {200, 300}, size = 30,
+      color = 'orange', label = 'Dog', behavior = {'follow'},
+      other = {target = 'player1', followDist = 100, maxVel = 5}},
   },
   entrances = {
     {from = "default", pos = {100, 50}}
   },
   collisionEvents = {
-    {names = {"player", "bicycle"}, onCollide = "curseAtPlayer"},
-    {names = {"player", "car"}, onCollide = "curseAtPlayer"},
+    {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopPlayer"},
+    {names = {"player", "car"}, onCollide = "curseAtPlayer", onColliding="stopPlayer"},
   }
 }
