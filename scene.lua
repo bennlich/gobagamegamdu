@@ -4,6 +4,7 @@ require('tree')
 require('dialog')
 pretty = require('pl.pretty')
 require('resources.scripts')
+cron = require('libs.cron')
 
 Scene = Class{
   init = function(self, filename)
@@ -12,6 +13,7 @@ Scene = Class{
 
     self.objects = {}
     self.sortedList = {}
+    self.clocks = {}
     self.entrances = {}
     self.dialogs = {}
     self.collisionRegistry = {}
@@ -58,16 +60,21 @@ function Scene:remove( name )
   if self.objects[name] then self.objects[name] = nil end
 end
 
+function Scene:addClock( clock )
+  table.insert(self.clocks, clock)
+end
+
 function Scene:entered(player, previousSceneName)
   local e = self.entrances[previousSceneName]
   self:add(player.name, player)
   player.pos = vector(unpack(e.pos))
   -- call entrance callback
-  if e.onEnter then scripts[e.onEnter]() end
+  if e.onEnter then scripts[e.onEnter](self, player) end
 end
 
 function Scene:left(player)
   self:remove(player.name)
+  self.clocks = {}
 end
 
 function Scene:registerCollisionEvent(opts)
@@ -78,6 +85,10 @@ function Scene:update( dt )
   self:resetCollisions()
   for _,v in pairs(self.objects) do 
     v:update(dt, self)
+  end
+  for k,v in pairs(self.clocks) do
+    local expired = v:update(dt)
+    if expired then self.clocks[k] = nil end
   end
   self.sortedList = {}
   for k,v in pairs(self.objects) do

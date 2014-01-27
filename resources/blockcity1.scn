@@ -44,6 +44,7 @@
     {names = {"player", "building"}, onColliding="stopPlayer"},
     {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
     {names = {"player", "edgeRight"}, onCollide = "goToBlockCity2"},
+    {names = {"player", "edgeLeft"}, onCollide = "goToTower"},
     {names = {"player", "car"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
   }
 }

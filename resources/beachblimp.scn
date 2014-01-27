@@ -31,13 +31,12 @@
     }
   },
   entrances = {
-    {from = "default", pos = {100, 50}}
+    {from = "default", pos = {100, 50}},
+    {from = "blockcity1", pos = {100, 50}},
   },
   collisionEvents = {
-    {names = {"player2", "fisherpit"}, onCollide = "enterBlimp"},
-    {names = {"player1", "fisherpit"}, onCollide = "changeLabel"},
+    {names = {"player", "fisherpit"}, onCollide = "playerHitFisherpit"},
     {names = {"player", "skyblimp"}, onColliding = "stopObj1"},
     {names = {"player", "seacrab"}, onColliding = "stopObj1"},
-    {names = {"player", "edgeRight"}, onCollide = "enterBlimp"}
   }
 } 

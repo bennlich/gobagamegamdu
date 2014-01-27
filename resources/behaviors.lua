@@ -7,6 +7,12 @@ function behaviors.moveLeft(dt, obj, scene)
 end
 
 -- Requires: 
+-- other.xVel: The speed at which the object travels
+function behaviors.moveRight(dt, obj, scene)
+  obj.pos.x = obj.pos.x + obj.other.xVel
+end
+
+-- Requires: 
 -- none
 function behaviors.wrapX(dt, obj, scene )
   local edgeOffset = camera:getEdgeOffset(obj.pos.y)
@@ -28,6 +34,7 @@ end
 -- other.followDist: Follow until you get to this distance
 -- other.maxVel: The speed at which to follow
 function behaviors.follow(dt, obj, scene )
+  if not scene.objects[obj.other.target] then return end
   local target = scene.objects[obj.other.target]
   if target.pos:dist(obj.pos) > obj.other.followDist then
     local vel = obj.other.maxVel*(target.pos-obj.pos):normalized()

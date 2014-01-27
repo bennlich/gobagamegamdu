@@ -1,5 +1,6 @@
 input = require("input")
 vector = require("libs.hump.vector")
+tween = require("libs.tween")
 require("square")
 require("player")
 require("camera")
@@ -12,7 +13,7 @@ function love.load()
   love.graphics.setBackgroundColor( 255, 255, 255 ) 
   Label.loadFont()
 
-  world_vers = 1
+  world_vers = 2
   player = Player({size = 50, color = 'yellowGreen', 
                   name = "player" .. tostring(world_vers), label="You"})
   scenes = {}
@@ -20,13 +21,14 @@ function love.load()
 end
 
 function love.update( dt )
-  input.update(dt)
+  tween.update(dt)
   -- if input.wasJustPressed('space') then 
   --   if world_vers == 1 then world_vers = 2
   --   elseif world_vers == 2 then world_vers = 1  end
   --   player.name = "player"..tostring(world_vers)
   -- end  
   activeScene:update(dt)
+  input.update(dt)
 end
 
 function switchScene(name)
@@ -39,7 +41,7 @@ function switchScene(name)
   end
 
   activeScene = scenes[name]
-  camera = Camera(player, activeScene.horizon*winHeight)
+  camera = Camera(player, activeScene.horizon*winHeight )
   activeScene:entered(player, previousName)
 end
 
@@ -47,7 +49,7 @@ function drawHorizonLine( )
   love.graphics.setColor(146,149,151)
   love.graphics.setLineWidth(1)
   love.graphics.setLineStyle('rough')
-  love.graphics.line(0, camera.horizon, winWidth, camera.horizon)
+  love.graphics.line(0, winHeight-camera.horizon, winWidth, winHeight-camera.horizon)
 end
 
 function love.draw() 
