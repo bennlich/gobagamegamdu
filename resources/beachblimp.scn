@@ -36,8 +36,8 @@
   collisionEvents = {
     {names = {"player2", "fisherpit"}, onCollide = "enterBlimp"},
     {names = {"player1", "fisherpit"}, onCollide = "changeLabel"},
-    {names = {"player", "skyblimp"}, onColliding = "stopPlayer"},
-    {names = {"player", "seacrab"}, onColliding = "stopPlayer"},
+    {names = {"player", "skyblimp"}, onColliding = "stopObj1"},
+    {names = {"player", "seacrab"}, onColliding = "stopObj1"},
     {names = {"player", "edgeRight"}, onCollide = "enterBlimp"}
   }
 } 
