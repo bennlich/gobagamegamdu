@@ -1,10 +1,19 @@
 scripts = {}
 
-function scripts.stopPlayer( scene, player, obstacle )
-  if player.pos.y < obstacle.pos.y then 
-    player.pos.y = obstacle.pos.y-obstacle.depth/2-player.depth/2
-  elseif player.pos.y > obstacle.pos.y then
-    player.pos.y = obstacle.pos.y+obstacle.depth/2+player.depth/2
+function scripts.stopPlayer( scene, player, obstacle, penAmt, penDir)
+  -- Todo write a script that converts "penDir" into modulations of vector
+  if penDir == 'left' then 
+    player.pos.x = player.pos.x - penAmt
+  elseif penDir == 'right' then 
+    player.pos.x = player.pos.x + penAmt
+  elseif penDir == 'top' then 
+    player.pos.z = player.pos.z + penAmt
+  elseif penDir == 'bottom' then 
+    player.pos.z = player.pos.z - penAmt
+  elseif penDir == 'front' then 
+    player.pos.y = player.pos.y - penAmt
+  elseif penDir == 'back' then 
+    player.pos.y = player.pos.y + penAmt
   end
 end
 
@@ -28,4 +37,8 @@ end
 function scripts.curseAtPlayer( scene, player, bicycle )
   local curses = {"@#@$^#?!", "@$#%&*!", "?!?!?!?", "&*#@!"}
   bicycle.label:setContent(curses[math.random(1, #curses)])
+end
+
+function scripts.goToBlockCity2( scene, player, bicycle )
+  switchScene("blockcity2")
 end

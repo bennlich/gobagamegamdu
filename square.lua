@@ -65,6 +65,13 @@ function Square:getCollisionRect(  )
 
 end
 
+function Square:getSides(  )
+  -- returns left, right, front, back, bottom, top
+  -- in other words, low to high, x,y,z
+  local x,y,z,w,d,h = self:getCollisionRect()
+  return x-w/2,x+w/2, y-d/2,y+d/2, z,z+h
+end
+
 function Square:update(dt,scene)
   for k,v in pairs(self.behavior) do
     v(dt, self, scene)
