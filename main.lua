@@ -13,7 +13,7 @@ function love.load()
   love.graphics.setBackgroundColor( 255, 255, 255 ) 
   Label.loadFont()
 
-  world_vers = 2
+  world_vers = 1
   player = Player({size = 50, color = 'yellowGreen', 
                   name = "player" .. tostring(world_vers), label="You"})
   scenes = {}
