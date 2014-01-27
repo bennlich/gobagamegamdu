@@ -2,7 +2,7 @@ Class = require('libs.hump.class')
 require('square')
 require('tree')
 pretty = require('pl.pretty')
-require('scripts')
+require('resources.scripts')
 
 Scene = Class{
   init = function(self, filename)

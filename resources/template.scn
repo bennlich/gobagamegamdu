@@ -1,0 +1,8 @@
+{
+  name="name",
+  width=800,
+  horizon = 1.0,
+  squares = {},
+  entrances = {},
+  collisionEvents = {}
+}

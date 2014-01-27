@@ -16,7 +16,7 @@ function love.load()
   player = Player({size = 50, color = 'yellowGreen', 
                   name = "player" .. tostring(world_vers), label="You"})
   scenes = {}
-  switchScene("beachblimp")
+  switchScene("blockcity1")
 end
 
 function love.update( dt )

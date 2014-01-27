@@ -1,0 +1,32 @@
+{
+  name="name",
+  width=2000,
+  horizon = 1.0,
+  squares = {
+    {name = "bicycle1", pos = {500, 300}, size = 80, 
+      color = 'turquoise', label = 'Bike', behavior = {'moveLeft', 'wrapX'},
+      other = {xVel = 4}},
+    {name = "bicycle2", pos = {1200, 100}, size = 80, 
+      color = 'turquoise', label = 'Bike', behavior = {'moveLeft', 'wrapX'},
+      other = {xVel = 2}},
+    {name = "bicycle3", pos = {1800, 50}, size = 80, 
+      color = 'turquoise', label = 'Bike', behavior = {'moveLeft', 'wrapX'},
+      other = {xVel = 3}},
+    {name = "bicycle4", pos = {100, 200}, size = 80, 
+      color = 'turquoise', label = 'Bike', behavior = {'moveLeft', 'wrapX'},
+      other = {xVel = 2.5}},
+    {name = "car1", pos = {200, 300}, size = 100, 
+      color = 'magenta', label = 'Car', behavior = {'moveLeft', 'wrapX'},
+      other = {xVel = 7}},
+    {name = "car2", pos = {1100, 100}, size = 100, 
+      color = 'magenta', label = 'Car', behavior = {'moveLeft', 'wrapX'},
+      other = {xVel = 6}},
+  },
+  entrances = {
+    {from = "default", pos = {100, 50}}
+  },
+  collisionEvents = {
+    {names = {"player", "bicycle"}, onCollide = "curseAtPlayer"},
+    {names = {"player", "car"}, onCollide = "curseAtPlayer"},
+  }
+}

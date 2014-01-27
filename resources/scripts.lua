@@ -20,6 +20,12 @@ function scripts.debugOn( scene, player, obstacle )
   oldColor = player.color
   player.color = {255, 0, 0}
 end
+
 function scripts.debugOff( scene, player, obstacle )
   player.color = oldColor
+end
+
+function scripts.curseAtPlayer( scene, player, bicycle )
+  local curses = {"@#@$^#?!", "@$#%&*!", "?!?!?!?", "&*#@!"}
+  bicycle.label:setContent(curses[math.random(1, #curses)])
 end

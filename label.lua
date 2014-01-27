@@ -23,7 +23,7 @@ Label = Class{__includes=Loadable,
 }
 
 function Label.loadFont( )
-  Label.font = love.graphics.newFont("resources/SourceCodePro-Light.ttf", 18)
+  Label.font = love.graphics.newFont("resources/SourceCodePro-Regular.ttf", 18)
 end
   
 function Label:getTextDimensions(  )

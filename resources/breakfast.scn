@@ -1,0 +1,14 @@
+{
+  name="breakfast",
+  width=800,
+  horizon = 0.2,
+  squares = {
+
+  },
+  entrances = {
+    {from = "default", pos = {0,0}}
+  },
+  collisionEvents = {
+
+  }
+}

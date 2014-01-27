@@ -4,17 +4,7 @@ require("loadable")
 require("label")
 require("util")
 require("colors")
-
-local shadowColor = {0,0,0,128}
-local shadowColor2 = {0,0,0,0}
-local shadowMesh = love.graphics.newMesh(
-  {
-     {0,0, 0,0, unpack(shadowColor)},
-     {-0.2,-0.26, 0,0, unpack(shadowColor2)},
-     {0.8,-0.26, 0,0, unpack(shadowColor2)},
-     {1,0, 0,0, unpack(shadowColor)}
-  }
-)
+require("resources.behaviors")
 
 Square = Class{__includes=Loadable,
   defaults = {
@@ -27,7 +17,9 @@ Square = Class{__includes=Loadable,
     collisionRect = {},
     label = "",
     shadow = 'on',
-    border = {}
+    border = {},
+    behavior = {},
+    other = {}
   },
   init = function(self, opts)
     Loadable.init(self, opts)
@@ -42,6 +34,7 @@ Square = Class{__includes=Loadable,
     labelOpts.base = self
     if labelOpts.content ~= '' then
       self.label = Label(labelOpts)
+      self.originalLabelContent = self.label.content
     else
       self.label = nil
     end
@@ -49,6 +42,15 @@ Square = Class{__includes=Loadable,
     self.color = colors.loadColor(self.color)
     if self.border.color then 
       self.border.color=colors.loadColor(self.border.color) 
+    end
+
+    -- Transform behaviors into functions
+    local loadedBehavior = self.behavior
+    self.behavior = {}
+    -- If behavior is just a string, make a trivial array
+    if type(loadedBehavior) == 'string' then loadedBehavior = {loadedBehavior} end
+    for k,v in pairs(loadedBehavior) do
+      self.behavior[k] = behaviors[v]
     end
   end
 }
@@ -63,7 +65,10 @@ function Square:getCollisionRect(  )
 
 end
 
-function Square:update(dt)
+function Square:update(dt,scene)
+  for k,v in pairs(self.behavior) do
+    v(dt, self, scene)
+  end
 end
 
 function Square:draw(camera)
@@ -98,6 +103,16 @@ function Square:draw(camera)
 end
 
 function Square:drawShadow(camera)
+  local shadowColor = {0,0,0,128}
+  local shadowColor2 = {0,0,0,0}
+  local shadowMesh = love.graphics.newMesh(
+    {
+       {0,0, 0,0, unpack(shadowColor)},
+       {-0.2,-0.26, 0,0, unpack(shadowColor2)},
+       {0.8,-0.26, 0,0, unpack(shadowColor2)},
+       {1,0, 0,0, unpack(shadowColor)}
+    }
+  )
   love.graphics.push()
   local groundPos = camera:transformCoords(self.pos.x-self.size/2, self.pos.y)
   love.graphics.translate(groundPos.x, groundPos.y)

@@ -23,13 +23,16 @@ function Player:update(dt, scene)
 
   -- Stop player from going off sides of screen
   -- I should pass camera in here but bite me.
-  local screenPos = camera:groundToScreen(self.pos+vel)
-  if screenPos.x < 0 then 
-    vel = vector(0,0) 
+  local edgeOffset = camera:getEdgeOffset(self.pos.y)
+  local scaledSize = camera:getScale(self.pos.y)*self.size
+  if self.pos.x + vel.x - scaledSize/2 < edgeOffset then
+    vel.x = 0
+    self.pos.x = edgeOffset + scaledSize/2
     scene:collided(self, {name="edgeLeft"}) 
   end
-  if screenPos.x > winWidth then 
-    vel = vector(0,0) 
+  if self.pos.x + vel.x + scaledSize/2 > scene.width - edgeOffset then
+    vel.x = 0
+    self.pos.x = scene.width - edgeOffset - scaledSize/2
     scene:collided(self, {name="edgeRight"}) 
   end
 

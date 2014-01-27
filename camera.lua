@@ -32,3 +32,14 @@ end
 function Camera:getScale(y)
   return self.horizon/(self.horizon+y)
 end
+
+function Camera:getEdgeOffset( y )
+  local scale = self:getScale(y)
+  return winWidth*(scale-1)/(2*scale)
+  -- 0 = winWidth/2 + s*(x-winWidth/2)
+  -- s*(x-winWidth/2) = -winWidth/2
+  -- x-winWidth/2 = -winWidth/(2*s)
+  -- x = winWidth/(2*s) - winWidth/2
+  -- x = (winWidth*s - winWidth)/(2*s)
+  -- x = (winWidth)*(s-1)/2s
+end
