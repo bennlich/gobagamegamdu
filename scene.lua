@@ -68,10 +68,6 @@ function Scene:registerCollisionEvent(opts)
   table.insert(self.collisionRegistry, opts)
 end
 
-function doghit()
-  print('hello')
-end
-
 function Scene:update( dt )
   self:resetCollisions()
   for _,v in pairs(self.objects) do 
