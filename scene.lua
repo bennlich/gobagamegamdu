@@ -1,6 +1,7 @@
 Class = require('libs.hump.class')
 require('square')
 require('tree')
+require('dialog')
 pretty = require('pl.pretty')
 require('resources.scripts')
 
@@ -12,6 +13,7 @@ Scene = Class{
     self.objects = {}
     self.sortedList = {}
     self.entrances = {}
+    self.dialogs = {}
     self.collisionRegistry = {}
     self.collidedThisFrame = {}
     self.collidedLastFrame = {}
@@ -38,6 +40,11 @@ Scene = Class{
     if data.entrances then
       for _,v in pairs(data.entrances) do
         self.entrances[v.from] = v
+      end
+    end
+    if data.dialogs then
+      for _,v in pairs(data.dialogs) do
+        self.dialogs[v.name] = Dialog(v.filename, self)
       end
     end
   end
