@@ -21,7 +21,6 @@ function love.load()
 end
 
 function love.update( dt )
-  input.update(dt)
   tween.update(dt)
   -- if input.wasJustPressed('space') then 
   --   if world_vers == 1 then world_vers = 2
@@ -29,6 +28,7 @@ function love.update( dt )
   --   player.name = "player"..tostring(world_vers)
   -- end  
   activeScene:update(dt)
+  input.update(dt)
 end
 
 function switchScene(name)
@@ -41,7 +41,7 @@ function switchScene(name)
   end
 
   activeScene = scenes[name]
-  camera = Camera(player, activeScene.horizon*winHeight)
+  camera = Camera(player, activeScene.horizon*winHeight )
   activeScene:entered(player, previousName)
 end
 

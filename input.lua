@@ -1,3 +1,4 @@
+require('pl.tablex')
 module(..., package.seeall)
 
 curr_state, old_state = {}, {}
@@ -16,7 +17,7 @@ function keyreleased( key )
 end
 
 function update(dt)
-  old_state = curr_state
+  old_state = tablex.copy(curr_state)
 end
 
 function isKeyDown( key )
