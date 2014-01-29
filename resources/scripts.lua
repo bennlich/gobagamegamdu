@@ -53,7 +53,7 @@ function scripts.spawnBirds( scene, player )
   numBirds = 1
   local function spawnOne()
     local name = "bird"..tostring(numBirds)
-    local birdY = 0
+    local birdY = 20
     local offset = camera:getEdgeOffset(birdY)
     local birdSize = 20
     scene:add(name, Square{

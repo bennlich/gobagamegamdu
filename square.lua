@@ -1,4 +1,4 @@
-Class = require("libs.hump.class")
+  Class = require("libs.hump.class")
 
 require("loadable")
 require("label")

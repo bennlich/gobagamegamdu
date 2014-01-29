@@ -48,10 +48,10 @@
   },
   collisionEvents = {
     {names = {"player", "interactionCube"}, onColliding = "dialogTest"},
-    {names = {"player", "building"}, onColliding = "stopPlayer"},
+    {names = {"player", "building"}, onColliding = "stopObj1"},
     {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
     {names = {"player", "edgeRight"}, onCollide = "goToBlockCity2"},
-    {names = {"player", "edgeLeft"}, onCollide = "goToTower"},
+    {names = {"player", "edgeLeft"}, onCollide = "goToBeachBlimp"},
     {names = {"player", "car"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
   }
 }
