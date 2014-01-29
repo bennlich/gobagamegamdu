@@ -10,14 +10,17 @@ local numObjects = 0
 local objects = {}
 
 function editor.update( dt )
+  local modifier = 1
+  local horizonChange = 0
+  if love.keyboard.isDown('lshift') then modifier = 3 end
+
+  if love.keyboard.isDown('=') then horizonChange = 1 end
+  if love.keyboard.isDown('-') then horizonChange = -1 end
+
   if activeSquare then
     local vel = vector(0,0)
     local sizeChange = 0
     local elevationChange = 0
-    local horizonChange = 0
-    local modifier = 1
-
-    if love.keyboard.isDown('lshift') then modifier = 3 end
 
     if love.keyboard.isDown('left') then vel.x = -1 end
     if love.keyboard.isDown('right') then vel.x = 1 end
@@ -30,15 +33,15 @@ function editor.update( dt )
     if love.keyboard.isDown('w') then elevationChange = 1 end
     if love.keyboard.isDown('s') then elevationChange = -1 end
 
-    if love.keyboard.isDown('=') then horizonChange = 1 end
-    if love.keyboard.isDown('-') then horizonChange = -1 end
 
     activeSquare.pos =  activeSquare.pos + vel * modifier
     activeSquare.size = activeSquare.size + sizeChange * modifier
     activeSquare.elevation = activeSquare.elevation + elevationChange * modifier
-    activeScene.horizon = activeScene.horizon + horizonChange * modifier
     if activeSquare.elevation < 0 then activeSquare.elevation = 0 end
   end
+
+  activeScene.horizon = activeScene.horizon + horizonChange * modifier
+
   if love.keyboard.wasJustPressed('tab') then 
     -- god this is ugly but i'm tired
     if not activeSquare then activeSquare = objects[1] or nil 
