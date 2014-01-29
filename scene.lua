@@ -22,7 +22,7 @@ Scene = Class{
 
     self.width = data.width
     self.name = data.name
-    self.horizon = data.horizon
+    self.horizon = data.horizon * winHeight
 
     if data.squares then
       for _,v in pairs(data.squares) do
@@ -129,7 +129,7 @@ function Scene:drawHorizonLine( )
   love.graphics.setColor(146,149,151)
   love.graphics.setLineWidth(1)
   love.graphics.setLineStyle('rough')
-  love.graphics.line(0, winHeight-camera.horizon, winWidth, winHeight-camera.horizon)
+  love.graphics.line(0, winHeight-self.horizon, winWidth, winHeight-self.horizon)
 end
 
 function Scene:loadBackground(background)
@@ -149,7 +149,7 @@ end
 
 function Scene:drawFloor()
   love.graphics.setColor(self.floorColor)
-  love.graphics.rectangle('fill', 0, winHeight-camera.horizon, winWidth, camera.horizon)
+  love.graphics.rectangle('fill', 0, winHeight-self.horizon, winWidth, self.horizon)
 end
 
 -- COLLISIONS --

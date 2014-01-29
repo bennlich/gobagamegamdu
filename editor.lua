@@ -12,32 +12,65 @@ local objects = {}
 function editor.update( dt )
   if activeSquare then
     local vel = vector(0,0)
-    if love.keyboard.isKeyDown('left') then vel.x = -1 end
+    local sizeChange = 0
+    local elevationChange = 0
+    local horizonChange = 0
+    local modifier = 1
 
-    activeSquare.pos =  activeSquare.pos + vel
+    if love.keyboard.isDown('lshift') then modifier = 3 end
+
+    if love.keyboard.isDown('left') then vel.x = -1 end
+    if love.keyboard.isDown('right') then vel.x = 1 end
+    if love.keyboard.isDown('up') then vel.y = 1 end
+    if love.keyboard.isDown('down') then vel.y = -1 end
+
+    if love.keyboard.isDown('q') then sizeChange = 1 end
+    if love.keyboard.isDown('a') then sizeChange = -1 end
+
+    if love.keyboard.isDown('w') then elevationChange = 1 end
+    if love.keyboard.isDown('s') then elevationChange = -1 end
+
+    if love.keyboard.isDown('=') then horizonChange = 1 end
+    if love.keyboard.isDown('-') then horizonChange = -1 end
+
+    activeSquare.pos =  activeSquare.pos + vel * modifier
+    activeSquare.size = activeSquare.size + sizeChange * modifier
+    activeSquare.elevation = activeSquare.elevation + elevationChange * modifier
+    activeScene.horizon = activeScene.horizon + horizonChange * modifier
+    if activeSquare.elevation < 0 then activeSquare.elevation = 0 end
   end
   if love.keyboard.wasJustPressed('tab') then 
-    activeSquare = next(objects, table.find(activeSquare)) or objects[1]
+    -- god this is ugly but i'm tired
+    if not activeSquare then activeSquare = objects[1] or nil 
+    else
+      k,activeSquare = next(objects, table.find(objects, activeSquare)) 
+      if not activeSquare then activeSquare = objects[1] end
+    end
   end
-  if love.keyboard.wasJustPressed('s') then 
+  if love.keyboard.wasJustPressed(' ') then 
     editor.addNewSquare()
+  end
+
+  for k,v in pairs(activeScene.objects) do
+    if v == activeSquare then v.color = colors.red else v.color = colors.gray end
   end
 end
 
 function editor.addNewSquare(  )
   numObjects = numObjects + 1
   local newSquare = Square{
-    name=tostring(numObjects), pos={activeScene.width/2, 0}, 
+    name=tostring(numObjects), pos={activeScene.width/2-numObjects*100, 0}, 
     size = 100, color='gray'} 
   activeScene:add(newSquare) 
   table.insert(objects, newSquare)
+  activeSquare = newSquare
 end
 
 function editor.write( scene )
   local out = {}
   out.name = scene.name
   out.width = scene.width
-  out.horizon = scene.horizon
+  out.horizon = scene.horizon/winHeight
   out.squares = tablex.deepcopy(scene.objects)
   out.squares["player1"] = nil
   out.squares["player2"] = nil

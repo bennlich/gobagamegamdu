@@ -43,7 +43,7 @@ function switchScene(name, from)
   end
 
   activeScene = scenes[name]
-  camera = Camera(player, activeScene.horizon*winHeight )
+  camera = Camera(player)
   activeScene:entered(player, previousName)
 end
 

@@ -2,9 +2,8 @@ Class = require('libs.hump.class')
 vector = require('libs.hump.vector')
 
 Camera = Class{
-  init = function( self, following, horizon )
+  init = function( self, following)
     self.following = following
-    self.horizon = horizon
   end
 }
 
@@ -25,7 +24,7 @@ function Camera:transformCoords(x, y)
 end
 
 function Camera:getScale(y)
-  return self.horizon/(self.horizon+y)
+  return activeScene.horizon/(activeScene.horizon+y)
 end
 
 -- transforms a point from ground coordinates (where y is depth)
