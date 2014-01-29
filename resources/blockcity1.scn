@@ -2,6 +2,11 @@
   name="blockcity1",
   width=4000,
   horizon = 0.5,
+  background = {
+    filename = "background-test.png",
+    pos = {0, 500}
+  },
+  floorColor = {255, 255, 255},
   squares = {
     {name = "building1", pos = {-750, 500}, size = 1000, 
       color = 'magenta',
