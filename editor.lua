@@ -19,18 +19,22 @@ function editor.update( dt )
   if love.keyboard.wasJustPressed('tab') then 
     activeSquare = next(objects, table.find(activeSquare)) or objects[1]
   end
-  if love.keyboard.wasJustPressed('s') then 
+  if love.mouse.wasJustPressed('l') then 
     editor.addNewSquare()
   end
 end
 
 function editor.addNewSquare(  )
   numObjects = numObjects + 1
-  local newSquare = Square{
-    name=tostring(numObjects), pos={activeScene.width/2, 0}, 
-    size = 100, color='gray'} 
-  activeScene:add(newSquare) 
-  table.insert(objects, newSquare)
+  local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
+  local groundPos = camera:screenToGround(vector(mouseX, mouseY))
+  if groundPos then
+    local newSquare = Square{
+      name=tostring(numObjects), pos={groundPos.x, groundPos.y}, 
+      size = 100, color='gray'} 
+    activeScene:add(newSquare) 
+    table.insert(objects, newSquare)
+  end
 end
 
 function editor.write( scene )

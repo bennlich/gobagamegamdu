@@ -31,9 +31,21 @@ end
 -- transforms a point from ground coordinates (where y is depth)
 -- to screen coordinates
 function Camera:groundToScreen( pos )
-  local scale = self:getScale(pos.y) 
+  local scale = self:getScale(pos.y)
   local x = winWidth/2 + scale*(pos.x-self:getCamX())
   local y = winHeight - scale*pos.y
+  return vector(x, y)
+end
+
+function Camera:screenToGround( pos )
+  if (pos.y < self.horizon) then 
+    return nil
+  end
+  
+  local y = self.horizon * (pos.y - winHeight) / (winHeight - self.horizon - pos.y)
+  local scale = self:getScale(y)
+  local x = self:getCamX() + (pos.x - winWidth/2) / scale
+  
   return vector(x, y)
 end
 
