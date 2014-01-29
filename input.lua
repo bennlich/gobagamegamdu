@@ -1,6 +1,7 @@
 
 --module boilerplate
 local require = require
+local print = print
 local M = {}
 if setfenv then
   setfenv(1, M) -- for 5.1
@@ -10,6 +11,7 @@ end
 -- End module boilerplate
 
 tablex = require('pl.tablex')
+Pretty = require('pl.pretty')
 
 local curr_kb_state, old_kb_state = {}, {}
 local curr_mouse_state, old_mouse_state = {}, {}
@@ -23,11 +25,11 @@ local function keyreleased( key )
   curr_kb_state[key] = nil
 end
 
-local function mousepressed( button )
+local function mousepressed( x, y, button )
   curr_mouse_state[button] = true
 end
 
-local function mousereleased( button )
+local function mousereleased( x, y, button )
   curr_mouse_state[button] = nil
 end
 
