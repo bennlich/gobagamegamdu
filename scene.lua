@@ -144,7 +144,8 @@ function Scene:drawBackground()
   local y = self.background.pos.y
   local x = camera:getEdgeOffset(y)
   local groundPos = camera:groundToScreen(vector(x, y))
-  love.graphics.draw(self.background.image, self.background.pos.x+groundPos.x, 0)
+  local imageHeight = self.background.image:getHeight()
+  love.graphics.draw(self.background.image, self.background.pos.x+groundPos.x, 2-imageHeight+winHeight-activeScene.horizon)
 end
 
 function Scene:drawFloor()

@@ -1,7 +1,7 @@
 {
   name="blockcity1",
   width=4000,
-  horizon = 0.5,
+  horizon = 0.1,
   background = {
     filename = "BlockCitybackground.png",
     pos = {0, 500}
