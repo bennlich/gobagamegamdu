@@ -17,6 +17,15 @@ function table.concatArrays( ... )
   return t
 end
 
+function table.find(table, element)
+  for k, value in pairs(table) do
+    if value == element then
+      return k
+    end
+  end
+  return nil
+end
+
 nextTable={}
 function table.next(data)
   local ret = {}

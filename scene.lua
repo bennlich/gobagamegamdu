@@ -13,7 +13,6 @@ Scene = Class{
     local data = pretty.read(io.read("*all"))
 
     self.objects = {}
-    self.sortedList = {}
     self.clocks = {}
     self.entrances = {}
     self.dialogs = {}
@@ -86,6 +85,17 @@ function Scene:registerCollisionEvent(opts)
   table.insert(self.collisionRegistry, opts)
 end
 
+function Scene:getSortedList()
+  local sortedList = {}
+  for k,v in pairs(self.objects) do
+    table.insert(sortedList, v)
+  end
+  table.sort(sortedList, function( v1, v2 )
+    return v1.pos.y >  v2.pos.y
+  end)
+  return sortedList
+end
+
 function Scene:update( dt )
   self:resetCollisions()
   for _,v in pairs(self.objects) do 
@@ -95,28 +105,22 @@ function Scene:update( dt )
     local expired = v:update(dt)
     if expired then self.clocks[k] = nil end
   end
-  self.sortedList = {}
-  for k,v in pairs(self.objects) do
-    table.insert(self.sortedList, v)
-  end
-  table.sort(self.sortedList, function( v1, v2 )
-    return v1.pos.y >  v2.pos.y
-  end)
   self:processCollisions()
 end
 
 -- DRAW --
 
 function Scene:draw(camera)
+  local sortedList = self:getSortedList()
   if self.background then self:drawBackground() end
   self:drawFloor()
   self:drawHorizonLine()
-  for i,v in ipairs(self.sortedList) do
+  for i,v in ipairs(sortedList) do
     if v.shadow and v.shadow=='on' then 
       v:drawShadow(camera) 
     end
   end
-  for i,v in ipairs(self.sortedList) do
+  for i,v in ipairs(sortedList) do
     v:draw(camera)
   end
 end
@@ -156,9 +160,10 @@ function Scene:resetCollisions()
 end
 
 function Scene:processCollisions()
-  for i=1,#self.sortedList do
-    for j=i+1,#self.sortedList do
-      obj1, obj2 = self.sortedList[i], self.sortedList[j]
+  local sortedList = self:getSortedList()
+  for i=1,#sortedList do
+    for j=i+1,#sortedList do
+      obj1, obj2 = sortedList[i], sortedList[j]
       local le1,ri1,fr1,ba1,bo1,to1= obj1:getSides()
       local le2,ri2,fr2,ba2,bo2,to2= obj2:getSides()
 
