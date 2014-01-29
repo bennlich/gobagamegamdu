@@ -3,6 +3,8 @@
   width=800,
   horizon = 1.0,
   squares = {},
-  entrances = {},
+  entrances = {
+  	{from = 'default', pos = {0, 0}}
+  },
   collisionEvents = {}
 }

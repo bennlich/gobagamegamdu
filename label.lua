@@ -7,7 +7,6 @@ Pretty = require("pl.pretty")
 
 Label = Class{__includes=Loadable,
   defaults = {
-    base = {},
     content = "",
     width = 0,
     pos = {0,0},
@@ -47,12 +46,11 @@ end
 function Label:update(dt)
 end
 
-function Label:draw(camera)
+function Label:draw(camera, base)
   local textWidth, textHeight = self:getTextDimensions()
 
   love.graphics.setColor(self.color)
   love.graphics.push()
-  local base = self.base
   local groundPos = camera:transformCoords(base.pos.x + self.pos.x, base.pos.y + self.pos.y)
   local headY = groundPos.y - base.size - base.elevation
   love.graphics.translate(groundPos.x, headY)

@@ -31,7 +31,6 @@ Square = Class{__includes=Loadable,
     elseif type(self.label) == 'string' then
       labelOpts.content = self.label
     end
-    labelOpts.base = self
     if labelOpts.content ~= '' then
       self.label = Label(labelOpts)
       self.originalLabelContent = self.label.content
@@ -44,14 +43,8 @@ Square = Class{__includes=Loadable,
       self.border.color=colors.loadColor(self.border.color) 
     end
 
-    -- Transform behaviors into functions
-    local loadedBehavior = self.behavior
-    self.behavior = {}
     -- If behavior is just a string, make a trivial array
-    if type(loadedBehavior) == 'string' then loadedBehavior = {loadedBehavior} end
-    for k,v in pairs(loadedBehavior) do
-      self.behavior[k] = behaviors[v]
-    end
+    if type(self.behavior) == 'string' then self.behavior = {self.behavior} end
   end
 }
 
@@ -73,8 +66,8 @@ function Square:getSides(  )
 end
 
 function Square:update(dt,scene)
-  for k,v in pairs(self.behavior) do
-    v(dt, self, scene)
+  for _,v in pairs(self.behavior) do
+    behaviors[v](dt, self, scene)
   end
 end
 
@@ -105,7 +98,7 @@ function Square:draw(camera)
 
   if self.label then 
     -- print(self.label.content)
-    self.label:draw(camera) 
+    self.label:draw(camera, self) 
   end
 end
 

@@ -3,6 +3,7 @@ require('square')
 require('tree')
 require('dialog')
 pretty = require('pl.pretty')
+tablex = require('pl.tablex')
 require('resources.scripts')
 cron = require('libs.cron')
 
@@ -188,3 +189,4 @@ function Scene:collided(obj1, obj2, penAmt, penDir)
     end
   end
 end
+

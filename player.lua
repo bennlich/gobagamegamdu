@@ -9,10 +9,10 @@ Player = Class{__includes=Square}
 
 function Player:update(dt, scene)
   local vel = vector(0,0)
-  if input.isKeyDown('left') then vel.x = vel.x - xSpeed end
-  if input.isKeyDown('right') then vel.x = vel.x + xSpeed end 
-  if input.isKeyDown('down') then vel.y = vel.y - ySpeed end
-  if input.isKeyDown('up') then vel.y = vel.y + ySpeed end
+  if love.keyboard.isDown('left') then vel.x = vel.x - xSpeed end
+  if love.keyboard.isDown('right') then vel.x = vel.x + xSpeed end 
+  if love.keyboard.isDown('down') then vel.y = vel.y - ySpeed end
+  if love.keyboard.isDown('up') then vel.y = vel.y + ySpeed end
 
 
   -- Stop player from going off front of screen

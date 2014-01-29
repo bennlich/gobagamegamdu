@@ -1,6 +1,7 @@
 input = require("input")
 vector = require("libs.hump.vector")
 tween = require("libs.tween")
+editor = require("editor")
 require("square")
 require("player")
 require("camera")
@@ -9,9 +10,11 @@ require("label")
 
 function love.load()
   winWidth, winHeight = love.window.getDimensions()
-  input.register()
+  input.register(love)
   love.graphics.setBackgroundColor( 255, 255, 255 ) 
   Label.loadFont()
+
+  mode = 'game'
 
   world_vers = 1
   player = Player({size = 50, color = 'yellowGreen', 
@@ -21,21 +24,20 @@ function love.load()
 end
 
 function love.update( dt )
-  tween.update(dt)
-  -- if input.wasJustPressed('space') then 
-  --   if world_vers == 1 then world_vers = 2
-  --   elseif world_vers == 2 then world_vers = 1  end
-  --   player.name = "player"..tostring(world_vers)
-  -- end  
-  activeScene:update(dt)
-  input.update(dt)
+  if love.keyboard.wasJustPressed('x') then enterEditor() end
+  if mode == 'editor' then 
+    editor.update(dt) 
+  elseif mode == 'game' then 
+    tween.update(dt)
+    activeScene:update(dt)
+  end
 end
 
-function switchScene(name)
+function switchScene(name, from)
   if not scenes[name] then scenes[name] = Scene(name) end
   local previousScene = activeScene
-  local previousName = "default"
-  if previousScene then 
+  local previousName = from or "default"
+  if not from and previousScene then 
     previousScene:left(player) 
     previousName = previousScene.name
   end
@@ -43,6 +45,11 @@ function switchScene(name)
   activeScene = scenes[name]
   camera = Camera(player, activeScene.horizon*winHeight )
   activeScene:entered(player, previousName)
+end
+
+function enterEditor(  )
+  mode = 'editor'
+  switchScene('template', 'default')
 end
 
 function drawHorizonLine( )

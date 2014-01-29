@@ -108,7 +108,7 @@ function scripts.kidScram( scene, player )
 end
 
 function scripts.dialogTest( scene, player, interactionCube )
-  if (input.wasJustPressed(" ")) then
+  if (love.keyboard.wasJustPressed(" ")) then
     print("dialog test")
     print(scene.dialogs['chameleonDialog']:next())
   end
