@@ -3,7 +3,7 @@ require("util")
 
 Dialog = Class{
 	init = function(self, filename, scene)
-		io.input("resources/"..filename..".dialog")
+		io.input("resources/"..filename)
 		self.scene = scene
     	self.data = pretty.read(io.read("*all"))
     	self:nextChar()

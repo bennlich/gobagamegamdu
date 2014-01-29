@@ -40,7 +40,7 @@
     {name = "interactionCube", collisionRect={100,50,0,100,100,100}}
   },
   dialogs = {
-    {name = "chameleonDialog", filename = "chameleon"}
+    {name = "chameleonDialog", filename = "chameleon.dialog"}
   },
   entrances = {
     {from = "breakfast", pos = {100, 500}},
