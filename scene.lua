@@ -27,12 +27,12 @@ Scene = Class{
 
     if data.squares then
       for _,v in pairs(data.squares) do
-        self:add(v.name, Square(v))
+        self:add(Square(v))
       end
     end
     if data.trees then 
       for _,v in pairs(data.trees) do
-        self:add(v.name, Tree(v))
+        self:add(Tree(v))
       end
     end
     if data.collisionEvents then
@@ -50,11 +50,15 @@ Scene = Class{
         self.dialogs[v.name] = Dialog(v.filename, self)
       end
     end
+    if data.background then
+      self:loadBackground(data.background)
+    end
+    self.floorColor = data.floorColor or {255,255,255}
   end
 }
 
-function Scene:add(name, obj)
-  self.objects[name] = obj
+function Scene:add(obj)
+  self.objects[obj.name] = obj
 end
 
 function Scene:remove( name )
@@ -67,7 +71,7 @@ end
 
 function Scene:entered(player, previousSceneName)
   local e = self.entrances[previousSceneName]
-  self:add(player.name, player)
+  self:add(player)
   player.pos = vector(unpack(e.pos))
   -- call entrance callback
   if e.onEnter then scripts[e.onEnter](self, player) end
@@ -101,7 +105,12 @@ function Scene:update( dt )
   self:processCollisions()
 end
 
+-- DRAW --
+
 function Scene:draw(camera)
+  if self.background then self:drawBackground() end
+  self:drawFloor()
+  self:drawHorizonLine()
   for i,v in ipairs(self.sortedList) do
     if v.shadow and v.shadow=='on' then 
       v:drawShadow(camera) 
@@ -111,6 +120,35 @@ function Scene:draw(camera)
     v:draw(camera)
   end
 end
+
+function Scene:drawHorizonLine( )
+  love.graphics.setColor(146,149,151)
+  love.graphics.setLineWidth(1)
+  love.graphics.setLineStyle('rough')
+  love.graphics.line(0, winHeight-camera.horizon, winWidth, winHeight-camera.horizon)
+end
+
+function Scene:loadBackground(background)
+  self.background = {
+    image = love.graphics.newImage('resources/'..background.filename),
+    pos = vector(unpack(background.pos)) or vector(0, 500)
+  }
+end
+
+function Scene:drawBackground()
+  love.graphics.setColor(255,255,255)
+  local y = self.background.pos.y
+  local x = camera:getEdgeOffset(y)
+  local groundPos = camera:groundToScreen(vector(x, y))
+  love.graphics.draw(self.background.image, self.background.pos.x+groundPos.x, 0)
+end
+
+function Scene:drawFloor()
+  love.graphics.setColor(self.floorColor)
+  love.graphics.rectangle('fill', 0, winHeight-camera.horizon, winWidth, camera.horizon)
+end
+
+-- COLLISIONS --
 
 function Scene:resetCollisions()
   self.collidedLastFrame = self.collidedThisFrame

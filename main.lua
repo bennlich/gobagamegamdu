@@ -52,15 +52,7 @@ function enterEditor(  )
   switchScene('template', 'default')
 end
 
-function drawHorizonLine( )
-  love.graphics.setColor(146,149,151)
-  love.graphics.setLineWidth(1)
-  love.graphics.setLineStyle('rough')
-  love.graphics.line(0, winHeight-camera.horizon, winWidth, winHeight-camera.horizon)
-end
-
 function love.draw() 
-  drawHorizonLine()
   activeScene:draw(camera)
 end
 
