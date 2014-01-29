@@ -37,11 +37,11 @@ function Camera:groundToScreen( pos )
 end
 
 function Camera:screenToGround( pos )
-  if (pos.y < self.horizon) then 
+  if (pos.y > activeScene.horizon) then 
     return nil
   end
   
-  local y = self.horizon * (pos.y - winHeight) / (winHeight - self.horizon - pos.y)
+  local y = activeScene.horizon * (pos.y - winHeight) / (winHeight - activeScene.horizon - pos.y)
   local scale = self:getScale(y)
   local x = self:getCamX() + (pos.x - winWidth/2) / scale
   
