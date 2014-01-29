@@ -26,12 +26,12 @@ Scene = Class{
 
     if data.squares then
       for _,v in pairs(data.squares) do
-        self:add(v.name, Square(v))
+        self:add(Square(v))
       end
     end
     if data.trees then 
       for _,v in pairs(data.trees) do
-        self:add(v.name, Tree(v))
+        self:add(Tree(v))
       end
     end
     if data.collisionEvents then
@@ -56,8 +56,8 @@ Scene = Class{
   end
 }
 
-function Scene:add(name, obj)
-  self.objects[name] = obj
+function Scene:add(obj)
+  self.objects[obj.name] = obj
 end
 
 function Scene:remove( name )
@@ -70,7 +70,7 @@ end
 
 function Scene:entered(player, previousSceneName)
   local e = self.entrances[previousSceneName]
-  self:add(player.name, player)
+  self:add(player)
   player.pos = vector(unpack(e.pos))
   -- call entrance callback
   if e.onEnter then scripts[e.onEnter](self, player) end
