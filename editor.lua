@@ -6,61 +6,139 @@ tablex = require("pl.tablex")
 
 local activeSquare = nil
 local editor = {}
+-- e is where all of the edit functions live
+local e = {}
 local numObjects = 0
 local objects = {}
 
+local nothingSelected = {
+  update = 'nothingSelectedUpdate',
+  keyDown = {
+    ['='] = 'raiseHorizon',
+    ['-'] = 'lowerHorizon',
+  },
+  keyPressed = {
+    tab = 'selectNext'
+  },
+  mousePressed = {
+    l = 'addNewSquare'
+  },
+  modifier = 1,
+}
+
+local squareSelected = {
+  update = 'squareSelectedUpdate',
+  keyDown = {
+    ['='] = 'raiseHorizon',
+    ['-'] = 'lowerHorizon',
+    left = 'moveLeft',
+    right = 'moveRight',
+    up = 'moveBack',
+    down = 'moveForward',
+    q = 'makeBigger',
+    a = 'makeSmaller',
+    w = 'raise',
+    s = 'lower',
+  },
+  keyPressed = {
+    l = 'enterLabelMode',
+    tab = 'selectNext',
+    escape = 'unselect'
+  },
+  mousePressed = {
+    l = 'addNewSquare'
+  },
+  modifier = 1
+}
+
+local editLabel = {
+  update = 'editLabelUpdate',
+  keyPressed = {
+    esc = 'exitLabelMode'
+  }
+}
+
+local editorMode = nothingSelected
+
+
 function editor.update( dt )
-  local modifier = 1
-  local horizonChange = 0
-  if love.keyboard.isDown('lshift') then modifier = 3 end
+  if editorMode then
+    local shouldExit = e[editorMode.update](dt, editorMode)
+    if not shouldExit then
+      for k,v in pairs(editorMode.keyDown or {}) do
+        if love.keyboard.isDown(k) then e[v](dt, editorMode) end
+      end
+      for k,v in pairs(editorMode.keyPressed or {}) do
+        if love.keyboard.wasJustPressed(k) then e[v](dt, editorMode) end
+      end
 
-  if love.keyboard.isDown('=') then horizonChange = 1 end
-  if love.keyboard.isDown('-') then horizonChange = -1 end
-
-  if activeSquare then
-    local vel = vector(0,0)
-    local sizeChange = 0
-    local elevationChange = 0
-
-    if love.keyboard.isDown('left') then vel.x = -1 end
-    if love.keyboard.isDown('right') then vel.x = 1 end
-    if love.keyboard.isDown('up') then vel.y = 1 end
-    if love.keyboard.isDown('down') then vel.y = -1 end
-
-    if love.keyboard.isDown('q') then sizeChange = 1 end
-    if love.keyboard.isDown('a') then sizeChange = -1 end
-
-    if love.keyboard.isDown('w') then elevationChange = 1 end
-    if love.keyboard.isDown('s') then elevationChange = -1 end
-
-
-    activeSquare.pos =  activeSquare.pos + vel * modifier
-    activeSquare.size = activeSquare.size + sizeChange * modifier
-    activeSquare.elevation = activeSquare.elevation + elevationChange * modifier
-    if activeSquare.elevation < 0 then activeSquare.elevation = 0 end
-  end
-
-  activeScene.horizon = activeScene.horizon + horizonChange * modifier
-
-  if love.keyboard.wasJustPressed('tab') then 
-    -- god this is ugly but i'm tired
-    if not activeSquare then activeSquare = objects[1] or nil 
-    else
-      k,activeSquare = next(objects, table.find(objects, activeSquare)) 
-      if not activeSquare then activeSquare = objects[1] end
+      for k,v in pairs(editorMode.mousePressed or {}) do
+        if love.mouse.wasJustPressed(k) then e[v](dt, editorMode) end
+      end
     end
   end
+end
 
-  if love.mouse.wasJustPressed('l') then 
-    editor.addNewSquare()
-  end
+function editor.getMod( )
+  if love.keyboard.isDown('lshift') then return 3 else return 1 end
+end
 
+function e.nothingSelectedUpdate(dt, m) end
+
+function e.squareSelectedUpdate(dt, m) 
+  if not activeSquare then e.unselect() end
   for k,v in pairs(activeScene.objects) do
     if v == activeSquare then v.color = colors.red else v.color = colors.gray end
   end
 end
 
-function editor.addNewSquare(  )
+local function changeHorizon( dh, m )
+  activeScene.horizon = activeScene.horizon + editor.getMod()*dh
+end
+function e.raiseHorizon(dt, m) changeHorizon(1, m) end
+function e.lowerHorizon(dt, m) changeHorizon(-1, m) end
+
+local function changeX( dx, m )
+  activeSquare.pos.x = activeSquare.pos.x + editor.getMod()*dx
+end
+function e.moveLeft(dt, m) changeX(-1, m) end
+function e.moveRight(dt, m) changeX(1, m) end
+
+local function changeY( dy, m )
+  activeSquare.pos.y = activeSquare.pos.y + editor.getMod()*dy
+end
+function e.moveBack(dt, m) changeY(1, m) end
+function e.moveForward(dt, m) changeY(-1, m) end
+
+local function changeSize( ds, m )
+  activeSquare.size = activeSquare.size + editor.getMod()*ds
+end
+function e.makeBigger(dt, m) changeSize(1, m) end
+function e.makeSmaller(dt, m) changeSize(-1, m) end
+
+local function changeElevation( de, m )
+  activeSquare.elevation = activeSquare.elevation + editor.getMod()*de
+  if activeSquare.elevation < 0 then activeSquare.elevation = 0 end
+end
+function e.raise(dt, m) changeElevation(1, m) end
+function e.lower(dt, m) changeElevation(-1, m) end
+
+function e.selectNext(dt, m)
+  -- god this is ugly but i'm tired
+  if not activeSquare then activeSquare = objects[1] or nil 
+  else
+    k,activeSquare = next(objects, table.find(objects, activeSquare)) 
+    if not activeSquare then activeSquare = objects[1] end
+  end
+  if activeSquare then editorMode = squareSelected end
+end
+
+function e.unselect(dt, m) 
+  activeSquare = nil 
+  editorMode = nothingSelected
+end
+
+function e.addNewSquare(dt, m) 
   numObjects = numObjects + 1
   local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
   local groundPos = camera:screenToGround(vector(mouseX, mouseY))
@@ -72,6 +150,21 @@ function editor.addNewSquare(  )
     table.insert(objects, newSquare)
     activeSquare = newSquare
   end
+end
+
+function e.enterLabelMode(dt, m) 
+  if activeSquare then
+    editorMode = editLabel
+  end
+end
+
+function e.editLabelUpdate(dt, m)
+  if not activeSquare.label then activeSquare.label = Label("") end
+end
+
+function e.exitLabelMode(  )
+  if activeSquare.label.content == "" then activeSquare.label = nil end
+  editorMode = squareSelected
 end
 
 function editor.write( scene )

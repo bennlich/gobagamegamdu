@@ -1,10 +1,10 @@
 {
   name="name",
   width=800,
-  horizon = 1.0,
+  horizon = 0.7,
   squares = {},
   entrances = {
-  	{from = 'default', pos = {0, 0}}
+  	{from = 'default', pos = {-100, -100}}
   },
   collisionEvents = {}
 }
