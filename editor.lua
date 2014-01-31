@@ -42,6 +42,7 @@ local squareSelected = {
   },
   keyPressed = {
     l = 'enterLabelMode',
+    c = 'enterColorMode',
     tab = 'selectNext',
     escape = 'unselect'
   },
@@ -54,7 +55,20 @@ local squareSelected = {
 local editLabel = {
   update = 'editLabelUpdate',
   keyPressed = {
-    esc = 'exitLabelMode'
+    escape = 'exitLabelMode',
+    ['return'] = 'exitLabelMode',
+    backspace = 'backspaceLabel'
+  }
+}
+
+local editColor = {
+  update = 'editColorUpdate',
+  keyPressed = {
+    escape = 'exitColorMode',
+    ['return'] = 'exitColorMode',
+    tab = 'switchColor',
+    backspace = 'backspaceColor',
+    b = 'toggleBorder'
   }
 }
 
@@ -152,19 +166,105 @@ function e.addNewSquare(dt, m)
   end
 end
 
+
+function e.editLabelUpdate(dt, m)
+end
+
 function e.enterLabelMode(dt, m) 
   if activeSquare then
+    if not activeSquare.label then activeSquare.label = Label("") end
     editorMode = editLabel
+
+    editorMode.oldTextInput = love.textinput
+    love.textinput = editor.labelTextInput
+    editorMode.oldFillColor = activeSquare.label.fillColor
+    editorMode.oldTextColor = activeSquare.label.textColor
+    activeSquare.label.fillColor = colors.red
+    activeSquare.label.textColor = colors.white
   end
 end
 
-function e.editLabelUpdate(dt, m)
-  if not activeSquare.label then activeSquare.label = Label("") end
-end
-
-function e.exitLabelMode(  )
+function e.exitLabelMode(dt, m)
   if activeSquare.label.content == "" then activeSquare.label = nil end
   editorMode = squareSelected
+
+  love.textinput = m.oldTextInput
+  activeSquare.label.fillColor = m.oldFillColor
+  activeSquare.label.textColor = m.oldTextColor
+end
+
+function e.backspaceLabel(dt, m)
+  if activeSquare.label.content:len() > 0 then
+    activeSquare.label.content = activeSquare.label.content:sub(1, -2)
+  end
+end
+
+function editor.labelTextInput(text)
+  activeSquare.label.content = activeSquare.label.content .. text
+end
+
+function e.editColorUpdate(dt, m)
+  activeSquare.color = {m.r, m.g, m.b, m.a}
+  local labels = {r='r',g='g',b='b',a='a'}
+  labels[m.selected] = labels[m.selected]:upper()
+  local numbers = string.format("%s=%d\n%s=%d\n%s=%d\n%s=%d", 
+                  labels.r,m.r,
+                  labels.g,m.g,
+                  labels.b,m.b,
+                  labels.a,m.a)
+  activeSquare.label.content = numbers
+end
+
+function e.enterColorMode(dt, m) 
+  if activeSquare then
+    editorMode = editColor
+    love.textinput = editor.colorTextInput
+
+    local c = activeSquare.color
+    editorMode.r,editorMode.g,editorMode.b,editorMode.a = c[1], c[2], c[3], c[4] or 255
+    editorMode.selected = 'r'
+
+    editorMode.oldLabel = activeSquare.label
+    activeSquare.label = Label()
+
+    editorMode.oldTextInput = love.textinput
+  end
+end
+
+function e.exitColorMode(dt, m)
+  editorMode = squareSelected
+
+  love.textinput = m.oldTextInput
+  activeSquare.label = m.oldLabel
+end
+
+function e.switchColor( dt, m )
+  local colors = {'r','g','b','a'}
+  local ind = table.find(colors, m.selected)
+  if m[m.selected] > 255 then m[m.selected]=m[m.selected]%255 end
+  m.selected = colors[ind+1] or colors[1]
+end
+
+function e.toggleBorder( dt, m )
+  if table.empty(activeSquare.border) then
+    activeSquare.border={color=colors.gray, thickness=1}
+  else
+    activeSquare.border={}
+  end
+end
+
+function e.backspaceColor(dt, m)
+  local s = tostring(m[m.selected])
+  if s:len() > 0 then
+    s = s:sub(1, -2)
+    m[m.selected] = tonumber(s) or 0
+  end
+end
+
+function editor.colorTextInput(text)
+  local n = tonumber(text)
+  local m = editorMode
+  if n then m[m.selected] = tonumber(m[m.selected]..n) end
 end
 
 function editor.write( scene )

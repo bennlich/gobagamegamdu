@@ -26,13 +26,9 @@ function Label.loadFont( )
 end
   
 function Label:getTextDimensions(  )
-  if self.width == 0 then
-    return self.font:getWidth(self.content), self.font:getHeight()
-  else
-    local width, lines = self.font:getWrap(self.content, self.width)
-    local height = self.font:getHeight() * lines
-    return width, height
-  end
+  local width, lines = self.font:getWrap(self.content, self.width)
+  local height = self.font:getHeight() * lines
+  return width, height
 end
 
 function Label:setContent( text )
