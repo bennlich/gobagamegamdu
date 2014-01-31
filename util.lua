@@ -32,3 +32,8 @@ function table.next(data)
   nextTable[data], ret = next(data, nextTable[data])
   return ret
 end
+
+function fileExists(name)
+   local f=io.open(name,"r")
+   if f~=nil then io.close(f) return true else return false end
+end

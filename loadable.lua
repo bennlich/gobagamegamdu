@@ -12,8 +12,15 @@ Loadable = Class{
     end
     -- Lets you pass in either a vector or a pair of numbers
     if self.pos then
-      self.pos = (vector.isvector(self.pos) and self.pos) 
-        or vector(unpack(self.pos))
+      if not vector.isvector(self.pos) then 
+        if self.pos.x and self.pos.y then
+          self.pos = vector(self.pos.x, self.pos.y)
+        elseif unpack(self.pos) then
+          self.pos = vector(unpack(self.pos))
+        else
+          self.pos = vector(-1, -1)
+        end
+      end
     end
   end,
   defaults = {

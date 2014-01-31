@@ -8,8 +8,7 @@ local activeSquare = nil
 local editor = {}
 -- e is where all of the edit functions live
 local e = {}
-local numObjects = 0
-local objects = {}
+local selSquare = Square{border={thickness=4, color=colors.red},color={0,0,0,0}}
 
 local nothingSelected = {
   update = 'nothingSelectedUpdate',
@@ -18,7 +17,8 @@ local nothingSelected = {
     ['-'] = 'lowerHorizon',
   },
   keyPressed = {
-    tab = 'selectNext'
+    tab = 'selectNext',
+    o = 'write'
   },
   mousePressed = {
     l = 'addNewSquare'
@@ -44,7 +44,8 @@ local squareSelected = {
     l = 'enterLabelMode',
     c = 'enterColorMode',
     tab = 'selectNext',
-    escape = 'unselect'
+    escape = 'unselect',
+    o = 'write'
   },
   mousePressed = {
     l = 'addNewSquare'
@@ -76,6 +77,8 @@ local editorMode = nothingSelected
 
 
 function editor.update( dt )
+  activeScene.objects["player1"] = nil
+  activeScene.objects["player2"] = nil
   if editorMode then
     local shouldExit = e[editorMode.update](dt, editorMode)
     if not shouldExit then
@@ -91,6 +94,16 @@ function editor.update( dt )
       end
     end
   end
+  if activeSquare then
+    local offset = 20
+    selSquare.size = activeSquare.size + offset
+    selSquare.pos = activeSquare.pos
+    selSquare.elevation = activeSquare.elevation - offset/2
+  end
+end
+
+function editor.draw(camera)
+  selSquare:draw(camera)
 end
 
 function editor.getMod( )
@@ -101,9 +114,6 @@ function e.nothingSelectedUpdate(dt, m) end
 
 function e.squareSelectedUpdate(dt, m) 
   if not activeSquare then e.unselect() end
-  for k,v in pairs(activeScene.objects) do
-    if v == activeSquare then v.color = colors.red else v.color = colors.gray end
-  end
 end
 
 local function changeHorizon( dh, m )
@@ -139,10 +149,10 @@ function e.lower(dt, m) changeElevation(-1, m) end
 
 function e.selectNext(dt, m)
   -- god this is ugly but i'm tired
-  if not activeSquare then activeSquare = objects[1] or nil 
+  if not activeSquare then _,activeSquare = next(activeScene.objects)
   else
-    k,activeSquare = next(objects, table.find(objects, activeSquare)) 
-    if not activeSquare then activeSquare = objects[1] end
+    k,activeSquare = next(activeScene.objects, table.find(activeScene.objects, activeSquare)) 
+    if not activeSquare then _,activeSquare = next(activeScene.objects) end
   end
   if activeSquare then editorMode = squareSelected end
 end
@@ -153,16 +163,22 @@ function e.unselect(dt, m)
 end
 
 function e.addNewSquare(dt, m) 
-  numObjects = numObjects + 1
   local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
   local groundPos = camera:screenToGround(vector(mouseX, mouseY))
+  function getFreeIndex()
+    local i = 1
+    while activeScene.objects[tostring(i)] do
+      i=i+1
+    end
+    return i
+  end
   if groundPos then
     local newSquare = Square{
-      name=tostring(numObjects), pos={groundPos.x, groundPos.y}, 
+      name=tostring(getFreeIndex()), pos={math.floor(groundPos.x), math.floor(groundPos.y)}, 
       size = 100, color='gray'} 
     activeScene:add(newSquare) 
-    table.insert(objects, newSquare)
     activeSquare = newSquare
+    editorMode=squareSelected
   end
 end
 
@@ -185,12 +201,15 @@ function e.enterLabelMode(dt, m)
 end
 
 function e.exitLabelMode(dt, m)
-  if activeSquare.label.content == "" then activeSquare.label = nil end
   editorMode = squareSelected
-
   love.textinput = m.oldTextInput
-  activeSquare.label.fillColor = m.oldFillColor
-  activeSquare.label.textColor = m.oldTextColor
+  if activeSquare.label.content == "" then 
+    activeSquare.label = nil 
+  else
+    activeSquare.label.fillColor = m.oldFillColor
+    activeSquare.label.textColor = m.oldTextColor
+  end
+
 end
 
 function e.backspaceLabel(dt, m)
@@ -267,17 +286,20 @@ function editor.colorTextInput(text)
   if n then m[m.selected] = tonumber(m[m.selected]..n) end
 end
 
-function editor.write( scene )
+function e.write(dt, m)
   local out = {}
-  out.name = scene.name
-  out.width = scene.width
-  out.horizon = scene.horizon/winHeight
-  out.squares = tablex.deepcopy(scene.objects)
+  out.name = activeScene.name
+  out.width = activeScene.width
+  out.horizon = activeScene.horizon/winHeight
+  out.squares = tablex.deepcopy(activeScene.objects)
   out.squares["player1"] = nil
   out.squares["player2"] = nil
-  out.entrances = tablex.deepcopy(scene.entrances)
-  out.collisionEvents = tablex.deepcopy(scene.collisionRegistry)
-  print(pretty.write(out))
+  out.entrances = tablex.deepcopy(activeScene.entrances)
+  out.collisionEvents = tablex.deepcopy(activeScene.collisionRegistry)
+
+  io.output("resources/editorOutput.scn")
+  io.write(pretty.write(out))
+  io.close()
 end
 
 return editor

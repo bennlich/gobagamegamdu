@@ -7,6 +7,7 @@ require("player")
 require("camera")
 require("scene")
 require("label")
+require("util")
 
 function love.load()
   winWidth, winHeight = love.window.getDimensions()
@@ -49,10 +50,15 @@ end
 
 function enterEditor(  )
   mode = 'editor'
-  switchScene('template', 'default')
+  if fileExists('resources/editorOutput.scn') then
+    switchScene('editorOutput', 'default')
+  else
+    switchScene('template', 'default')
+  end
 end
 
 function love.draw() 
   activeScene:draw(camera)
+  if editor then editor.draw(camera) end
 end
 
