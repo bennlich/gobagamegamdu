@@ -37,7 +37,7 @@ function Camera:groundToScreen( pos )
 end
 
 function Camera:screenToGround( pos )
-  if (pos.y > activeScene.horizon) then 
+  if ((winHeight - pos.y) > activeScene.horizon) then 
     return nil
   end
   
