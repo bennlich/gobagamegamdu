@@ -1,6 +1,7 @@
 require("scene")
 require("square")
 require("util")
+require("colors")
 pretty = require("pl.pretty")
 tablex = require("pl.tablex")
 
@@ -21,7 +22,7 @@ local nothingSelected = {
     o = 'write'
   },
   mousePressed = {
-    l = 'addNewSquare'
+    l = 'selectOrAddNewSquare'
   },
   modifier = 1,
 }
@@ -42,13 +43,14 @@ local squareSelected = {
   },
   keyPressed = {
     l = 'enterLabelMode',
-    c = 'enterColorMode',
+    c = 'enterRGBMode',
+    n = 'enterColorNameMode',
     tab = 'selectNext',
     escape = 'unselect',
     o = 'write'
   },
   mousePressed = {
-    l = 'addNewSquare'
+    l = 'selectOrAddNewSquare'
   },
   modifier = 1
 }
@@ -62,14 +64,24 @@ local editLabel = {
   }
 }
 
-local editColor = {
-  update = 'editColorUpdate',
+local editRGB = {
+  update = 'editRGBUpdate',
   keyPressed = {
-    escape = 'exitColorMode',
-    ['return'] = 'exitColorMode',
-    tab = 'switchColor',
-    backspace = 'backspaceColor',
+    escape = 'exitRGBMode',
+    ['return'] = 'exitRGBMode',
+    tab = 'switchComponent',
+    backspace = 'backspaceRGB',
     b = 'toggleBorder'
+  }
+}
+
+local chooseColorName = {
+  update = 'chooseColorNameUpdate',
+  keyPressed = {
+    escape = 'exitColorNameMode',
+    tab = 'nextColorName',
+    ['return'] = 'saveAndExitColorNameMode',
+    backspace = 'backspaceColorName'
   }
 }
 
@@ -149,6 +161,7 @@ function e.lower(dt, m) changeElevation(-1, m) end
 
 function e.selectNext(dt, m)
   -- god this is ugly but i'm tired
+  -- Seems to select the same ones over and over? ugh
   if not activeSquare then _,activeSquare = next(activeScene.objects)
   else
     k,activeSquare = next(activeScene.objects, table.find(activeScene.objects, activeSquare)) 
@@ -162,9 +175,10 @@ function e.unselect(dt, m)
   editorMode = nothingSelected
 end
 
-function e.addNewSquare(dt, m) 
+function e.addNewSquare(dt, m)
   local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
   local groundPos = camera:screenToGround(vector(mouseX, mouseY))
+
   function getFreeIndex()
     local i = 1
     while activeScene.objects[tostring(i)] do
@@ -182,6 +196,18 @@ function e.addNewSquare(dt, m)
   end
 end
 
+function e.selectOrAddNewSquare(dt, m) 
+  local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
+
+  local squaresOnScreen = {}
+  for k,v in pairs(activeScene.objects) do
+    table.insert(squaresOnScreen, v:getScreenBounds(camera))
+  end
+  for k,v in pairs(squaresOnScreen) do
+    -- TODO: TEST SQUARES HERE TO SEE IF CAR IS INSIDE
+  end
+
+end
 
 function e.editLabelUpdate(dt, m)
 end
@@ -222,7 +248,7 @@ function editor.labelTextInput(text)
   activeSquare.label.content = activeSquare.label.content .. text
 end
 
-function e.editColorUpdate(dt, m)
+function e.editRGBUpdate(dt, m)
   activeSquare.color = {m.r, m.g, m.b, m.a}
   local labels = {r='r',g='g',b='b',a='a'}
   labels[m.selected] = labels[m.selected]:upper()
@@ -234,10 +260,10 @@ function e.editColorUpdate(dt, m)
   activeSquare.label.content = numbers
 end
 
-function e.enterColorMode(dt, m) 
+function e.enterRGBMode(dt, m) 
   if activeSquare then
-    editorMode = editColor
-    love.textinput = editor.colorTextInput
+    editorMode = editRGB
+    love.textinput = editor.RGBTextInput
 
     local c = activeSquare.color
     editorMode.r,editorMode.g,editorMode.b,editorMode.a = c[1], c[2], c[3], c[4] or 255
@@ -250,14 +276,20 @@ function e.enterColorMode(dt, m)
   end
 end
 
-function e.exitColorMode(dt, m)
+function e.exitRGBMode(dt, m)
   editorMode = squareSelected
 
   love.textinput = m.oldTextInput
   activeSquare.label = m.oldLabel
 end
 
-function e.switchColor( dt, m )
+function editor.RGBTextInput(text)
+  local n = tonumber(text)
+  local m = editorMode
+  if n then m[m.selected] = tonumber(m[m.selected]..n) end
+end
+
+function e.switchComponent( dt, m )
   local colors = {'r','g','b','a'}
   local ind = table.find(colors, m.selected)
   if m[m.selected] > 255 then m[m.selected]=m[m.selected]%255 end
@@ -272,7 +304,7 @@ function e.toggleBorder( dt, m )
   end
 end
 
-function e.backspaceColor(dt, m)
+function e.backspaceRGB(dt, m)
   local s = tostring(m[m.selected])
   if s:len() > 0 then
     s = s:sub(1, -2)
@@ -280,10 +312,72 @@ function e.backspaceColor(dt, m)
   end
 end
 
-function editor.colorTextInput(text)
-  local n = tonumber(text)
-  local m = editorMode
-  if n then m[m.selected] = tonumber(m[m.selected]..n) end
+local function colorsEqual(c1, c2)
+  return c1[1]==c2[1] and c1[2]==c2[2] and c1[3]==c2[3] and c1[4]==c2[4]
+end
+
+local function matchToName(c)
+  for k,v in pairs(colors) do
+    if type(v)=='table' and colorsEqual(c, v) then return k end
+  end
+  return nil
+end
+
+function e.enterColorNameMode(dt, m)
+  if activeSquare then
+    editorMode = chooseColorName
+
+    editorMode.colorName = matchToName(activeSquare.color) or ""
+
+    editorMode.oldLabel = activeSquare.label
+    activeSquare.label = Label()
+
+    editorMode.oldTextInput = love.textinput
+    love.textinput = editor.colorNameTextInput
+  end
+end
+
+function e.exitColorNameMode(dt, m)
+  editorMode = squareSelected
+
+  love.textinput = m.oldTextInput
+  activeSquare.label = m.oldLabel
+end
+
+function e.saveAndExitColorNameMode(dt, m)
+  if type(colors[m.colorName])=='table' then 
+    e.exitColorNameMode(dt, m)
+  end
+end
+
+function e.chooseColorNameUpdate(dt, m)
+  activeSquare.label.content = "Color Name: "..m.colorName
+  if type(colors[m.colorName])=='table' then 
+    activeSquare.color = colors[m.colorName] 
+  end
+end
+
+function e.nextColorName(dt, m)
+  local function getNextColor(t, i)
+    local c = nil
+    repeat i,c = next(t, i) until type(c)=='table' or c==nil
+    -- If we hit the end of the table, start from the beginning
+    if not c then return getNextColor(t, nil) 
+    else return i,c
+    end
+  end
+  local c = matchToName(activeSquare.color)
+  m.colorName = getNextColor(colors, c)
+end
+
+function e.backspaceColorName(dt, m)
+  if m.colorName:len() > 0 then
+    m.colorName = m.colorName:sub(1, -2)
+  end
+end
+
+function editor.colorNameTextInput(text)
+  editorMode.colorName = editorMode.colorName..text
 end
 
 function e.write(dt, m)

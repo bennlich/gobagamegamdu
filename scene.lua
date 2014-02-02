@@ -111,10 +111,6 @@ end
 -- DRAW --
 
 function Scene:draw(camera)
-  if love.keyboard.isDown('n') then
-    print(pretty.write(self.objects))
-  end
-
   local sortedList = self:getSortedList()
   if self.background then self:drawBackground() end
   self:drawFloor()

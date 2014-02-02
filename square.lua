@@ -71,31 +71,48 @@ function Square:update(dt,scene)
   end
 end
 
-function Square:draw(camera)
-  love.graphics.push()
-  -- Get the lower-left coordinate
-  local groundPos = camera:transformCoords(self.pos.x-self.size/2, self.pos.y)
-  -- draw the character from the head down
-  local headY = groundPos.y - self.size - self.elevation
-  love.graphics.translate(groundPos.x, headY)
-
-  -- This seems stupid to undo the scale, but it lets us draw
-  -- at the right position with crisp lines
+function Square:getScreenBounds(camera)
+  local groundPos=camera:groundToScreen(self.pos)
   local scale = camera:getScale(self.pos.y)
-  love.graphics.scale(1/scale, 1/scale)
-  local drawSize = scale*self.size
-  
-  love.graphics.setColor(self.color)
-  love.graphics.rectangle("fill", 0, 0, drawSize, drawSize)
+  local topY = groundPos.y - scale*(self.size + self.elevation)
+  local leftX = groundPos.x - scale*self.size/2
+  return {leftX, topY, scale*self.size, scale*self.size}
+end
 
+function Square:draw(camera)
+  -- love.graphics.push()
+  -- -- Get the lower-left coordinate
+  -- local groundPos = camera:transformCoords(self.pos.x-self.size/2, self.pos.y)
+  -- -- draw the character from the head down
+  -- local headY = groundPos.y - self.size - self.elevation
+  -- love.graphics.translate(groundPos.x, headY)
+
+  -- -- This seems stupid to undo the scale, but it lets us draw
+  -- -- at the right position with crisp lines
+  -- local scale = camera:getScale(self.pos.y)
+  -- love.graphics.scale(1/scale, 1/scale)
+  -- local drawSize = scale*self.size
+  
+  -- love.graphics.setColor(self.color)
+  -- love.graphics.rectangle("fill", 0, 0, drawSize, drawSize)
+
+  -- if not table.empty(self.border) then
+  --   love.graphics.setColor(self.border.color)
+  --   love.graphics.setLineWidth(self.border.thickness or 1)
+  --   love.graphics.setLineStyle('rough')
+  --   love.graphics.rectangle("line", 0, 0, drawSize, drawSize)
+  -- end
+  -- love.graphics.pop()
+  local bounds = self:getScreenBounds(camera)
+  love.graphics.setColor(self.color)
+  love.graphics.rectangle("fill", unpack(bounds))
   if not table.empty(self.border) then
     love.graphics.setColor(self.border.color)
     love.graphics.setLineWidth(self.border.thickness or 1)
     love.graphics.setLineStyle('rough')
-    love.graphics.rectangle("line", 0, 0, drawSize, drawSize)
+    love.graphics.rectangle("line", unpack(bounds))
   end
-  love.graphics.pop()
-
+ 
   if self.label then 
     -- print(self.label.content)
     self.label:draw(camera, self) 
