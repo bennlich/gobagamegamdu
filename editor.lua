@@ -200,12 +200,16 @@ function e.selectOrAddNewSquare(dt, m)
   local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
 
   local squaresOnScreen = {}
+  local selected = false
   for k,v in pairs(activeScene.objects) do
-    table.insert(squaresOnScreen, v:getScreenBounds(camera))
+    local b = v:getScreenBounds(camera)
+    if mouseX > b[1] and mouseX < b[1]+b[3]
+      and mouseY > b[2] and mouseY < b[2]+b[4] then
+      activeSquare = v
+      selected = true
+    end
   end
-  for k,v in pairs(squaresOnScreen) do
-    -- TODO: TEST SQUARES HERE TO SEE IF CAR IS INSIDE
-  end
+  if not selected then e.addNewSquare(dt, m) end
 
 end
 
