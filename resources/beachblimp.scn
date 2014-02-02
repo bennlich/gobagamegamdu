@@ -32,7 +32,7 @@
   },
   entrances = {
     {from = "default", pos = {100, 50}},
-    {from = "blockcity1", pos = {100, 50}},
+    {from = "blockcity1", pos = {100, 50}, transition = "fadeOut"},
   },
   collisionEvents = {
     {names = {"player", "fisherpit"}, onCollide = "playerHitFisherpit"},

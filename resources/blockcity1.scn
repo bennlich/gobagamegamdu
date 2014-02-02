@@ -1,7 +1,7 @@
 {
   name="blockcity1",
   width=4000,
-  horizon = 0.1,
+  horizon = 0.6,
   background = {
     filename = "BlockCitybackground.png",
     pos = {0, 500}
@@ -51,12 +51,14 @@
     {from = "breakfast", pos = {100, 500}},
     {from = "default", pos = {100, 50}}
   },
+  exits = {
+    {leaveOn = "edgeLeft", to="beachblimp", transition="fadeIn"},
+    {leaveOn = "edgeRight", to="blockcity2"},
+  },
   collisionEvents = {
     {names = {"player", "interactionCube"}, onColliding = "dialogTest"},
     {names = {"player", "building"}, onColliding = "stopObj1"},
     {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
-    {names = {"player", "edgeRight"}, onCollide = "goToBlockCity2"},
-    {names = {"player", "edgeLeft"}, onCollide = "goToBeachBlimp"},
     {names = {"player", "car"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
   }
 }

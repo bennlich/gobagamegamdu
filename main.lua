@@ -37,11 +37,7 @@ end
 function switchScene(name, from)
   if not scenes[name] then scenes[name] = Scene(name) end
   local previousScene = activeScene
-  local previousName = from or "default"
-  if not from and previousScene then 
-    previousScene:left(player) 
-    previousName = previousScene.name
-  end
+  local previousName = from or (previousScene and previousScene.name) or "default"
 
   activeScene = scenes[name]
   camera = Camera(player)

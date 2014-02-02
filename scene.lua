@@ -5,6 +5,7 @@ require('dialog')
 pretty = require('pl.pretty')
 tablex = require('pl.tablex')
 require('resources.scripts')
+require('resources.transitions')
 cron = require('libs.cron')
 
 Scene = Class{
@@ -15,6 +16,7 @@ Scene = Class{
     self.objects = {}
     self.clocks = {}
     self.entrances = {}
+    self.exits = {}
     self.dialogs = {}
     self.collisionRegistry = {}
     self.collidedThisFrame = {}
@@ -44,6 +46,11 @@ Scene = Class{
         self.entrances[v.from] = v
       end
     end
+    if data.exits then
+      for _,v in pairs(data.exits) do
+        self.exits[v.leaveOn] = v
+      end
+    end
     if data.dialogs then
       for _,v in pairs(data.dialogs) do
         self.dialogs[v.name] = Dialog(v.filename, self)
@@ -68,17 +75,32 @@ function Scene:addClock( clock )
   table.insert(self.clocks, clock)
 end
 
+function Scene:leaveFor(exit)
+  if exit.onExit then scripts[exit.onExit](self, player) end
+  self:remove(player.name)
+  if exit.transition then
+    self.transition = transitions[exit.transition](function()
+      switchScene(exit.to)
+      self.transition = nil
+      self.clocks = {} 
+    end)
+  else
+    switchScene(exit.to)
+    self.clocks = {}
+  end
+end
+
 function Scene:entered(player, previousSceneName)
   local e = self.entrances[previousSceneName]
   self:add(player)
   player.pos = vector(unpack(e.pos))
   -- call entrance callback
   if e.onEnter then scripts[e.onEnter](self, player) end
-end
-
-function Scene:left(player)
-  self:remove(player.name)
-  self.clocks = {}
+  if e.transition then 
+    self.transition = transitions[e.transition](function()
+      self.transition = nil
+    end)
+  end
 end
 
 function Scene:registerCollisionEvent(opts)
@@ -106,6 +128,8 @@ function Scene:update( dt )
     if expired then self.clocks[k] = nil end
   end
   self:processCollisions()
+
+  if self.transition then self.transition:update(activeScene) end
 end
 
 -- DRAW --
@@ -123,6 +147,7 @@ function Scene:draw(camera)
   for i,v in ipairs(sortedList) do
     v:draw(camera)
   end
+  if self.transition then self.transition:draw() end
 end
 
 function Scene:drawHorizonLine( )
@@ -230,6 +255,21 @@ function Scene:collided(obj1, obj2, penAmt, penDir)
        end
        self.collidedThisFrame[tostring(obj1)..tostring(obj2)] =  
           {event=v, obj1=obj1, obj2=obj2, penAmt=penAmt, penDir=penDir}
+    end
+  end
+  if self.exits then
+    -- Check if any exits should happen
+    for _,v in pairs(self.exits) do
+      local player = "player"..world_vers
+      if (obj1.name == player and obj2.name:find(v.leaveOn)) or 
+         (obj2.name == player and obj1.name:find(v.leaveOn)) then
+        if not obj1.name == player then
+          local temp = obj1
+          obj1 = obj2
+          obj2 = temp
+        end  
+        self:leaveFor(v)
+      end
     end
   end
 end
