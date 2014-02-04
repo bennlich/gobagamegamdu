@@ -79,61 +79,47 @@ function Square:getScreenBounds(camera)
   return {leftX, topY, scale*self.size, scale*self.size}
 end
 
-function Square:draw(camera)
-  -- love.graphics.push()
-  -- -- Get the lower-left coordinate
-  -- local groundPos = camera:transformCoords(self.pos.x-self.size/2, self.pos.y)
-  -- -- draw the character from the head down
-  -- local headY = groundPos.y - self.size - self.elevation
-  -- love.graphics.translate(groundPos.x, headY)
-
-  -- -- This seems stupid to undo the scale, but it lets us draw
-  -- -- at the right position with crisp lines
-  -- local scale = camera:getScale(self.pos.y)
-  -- love.graphics.scale(1/scale, 1/scale)
-  -- local drawSize = scale*self.size
-  
-  -- love.graphics.setColor(self.color)
-  -- love.graphics.rectangle("fill", 0, 0, drawSize, drawSize)
-
-  -- if not table.empty(self.border) then
-  --   love.graphics.setColor(self.border.color)
-  --   love.graphics.setLineWidth(self.border.thickness or 1)
-  --   love.graphics.setLineStyle('rough')
-  --   love.graphics.rectangle("line", 0, 0, drawSize, drawSize)
-  -- end
-  -- love.graphics.pop()
-  local bounds = self:getScreenBounds(camera)
-  love.graphics.setColor(self.color)
-  love.graphics.rectangle("fill", unpack(bounds))
-  if not table.empty(self.border) then
-    love.graphics.setColor(self.border.color)
-    love.graphics.setLineWidth(self.border.thickness or 1)
-    love.graphics.setLineStyle('rough')
-    love.graphics.rectangle("line", unpack(bounds))
-  end
+function Square:setupDraw(camera)
+  -- Draw the square with z-order at its y position
+  addToDrawList(self.pos.y, function()
+    local bounds = self:getScreenBounds(camera)
+    love.graphics.setColor(self.color)
+    love.graphics.rectangle("fill", unpack(bounds))
+    if not table.empty(self.border) then
+      love.graphics.setColor(self.border.color)
+      love.graphics.setLineWidth(self.border.thickness or 1)
+      love.graphics.setLineStyle('rough')
+      love.graphics.rectangle("line", unpack(bounds))
+    end
+  end)
  
   if self.label then 
-    -- print(self.label.content)
-    self.label:draw(camera, self) 
+    self.label:setupDraw(camera, self) 
+  end
+
+  if self.shadow == 'on' then
+    self:setupDrawShadow(camera)
   end
 end
 
-function Square:drawShadow(camera)
-  local shadowColor = {0,0,0,128}
-  local shadowColor2 = {0,0,0,0}
-  local shadowMesh = love.graphics.newMesh(
-    {
-       {0,0, 0,0, unpack(shadowColor)},
-       {-0.2,-0.26, 0,0, unpack(shadowColor2)},
-       {0.8,-0.26, 0,0, unpack(shadowColor2)},
-       {1,0, 0,0, unpack(shadowColor)}
-    }
-  )
-  love.graphics.push()
-  local groundPos = camera:transformCoords(self.pos.x-self.size/2, self.pos.y)
-  love.graphics.translate(groundPos.x, groundPos.y)
-  love.graphics.scale(self.size, self.size)
-  love.graphics.draw(shadowMesh)
-  love.graphics.pop()
+function Square:setupDrawShadow(camera)
+  local shadowOffset = 0.01
+  addToDrawList(self.pos.y+shadowOffset, function()
+    local shadowColor = {0,0,0,128}
+    local shadowColor2 = {0,0,0,0}
+    local shadowMesh = love.graphics.newMesh(
+      {
+         {0,0, 0,0, unpack(shadowColor)},
+         {-0.2,-0.26, 0,0, unpack(shadowColor2)},
+         {0.8,-0.26, 0,0, unpack(shadowColor2)},
+         {1,0, 0,0, unpack(shadowColor)}
+      }
+    )
+    love.graphics.push()
+    local groundPos = camera:transformCoords(self.pos.x-self.size/2, self.pos.y)
+    love.graphics.translate(groundPos.x, groundPos.y)
+    love.graphics.scale(self.size, self.size)
+    love.graphics.draw(shadowMesh)
+    love.graphics.pop()
+  end)
 end

@@ -44,19 +44,16 @@
       other = {target = 'player1', followDist = 100, maxVel = 5}},
     {name = "interactionCube", collisionRect={100,50,0,100,100,100}}
   },
-  dialogs = {
-    {name = "chameleonDialog", filename = "chameleon.dialog"}
-  },
   entrances = {
     {from = "breakfast", pos = {100, 500}},
     {from = "default", pos = {100, 50}}
   },
   exits = {
-    {leaveOn = "edgeLeft", to="beachblimp", transition="fadeIn"},
+    {leaveOn = "edgeLeft", to="beachblimp", transition="fadeOut"},
     {leaveOn = "edgeRight", to="blockcity2"},
   },
   collisionEvents = {
-    {names = {"player", "interactionCube"}, onColliding = "dialogTest"},
+    {names = {"player1", "interactionCube"}, onColliding = "dialogTest"},
     {names = {"player", "building"}, onColliding = "stopObj1"},
     {names = {"player", "bicycle"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},
     {names = {"player", "car"}, onCollide = "curseAtPlayer", onColliding="stopObj1"},

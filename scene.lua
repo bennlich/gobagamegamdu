@@ -17,7 +17,6 @@ Scene = Class{
     self.clocks = {}
     self.entrances = {}
     self.exits = {}
-    self.dialogs = {}
     self.collisionRegistry = {}
     self.collidedThisFrame = {}
     self.collidedLastFrame = {}
@@ -49,11 +48,6 @@ Scene = Class{
     if data.exits then
       for _,v in pairs(data.exits) do
         self.exits[v.leaveOn] = v
-      end
-    end
-    if data.dialogs then
-      for _,v in pairs(data.dialogs) do
-        self.dialogs[v.name] = Dialog(v.filename, self)
       end
     end
     if data.background then
@@ -107,17 +101,6 @@ function Scene:registerCollisionEvent(opts)
   table.insert(self.collisionRegistry, opts)
 end
 
-function Scene:getSortedList()
-  local sortedList = {}
-  for k,v in pairs(self.objects) do
-    table.insert(sortedList, v)
-  end
-  table.sort(sortedList, function( v1, v2 )
-    return v1.pos.y >  v2.pos.y
-  end)
-  return sortedList
-end
-
 function Scene:update( dt )
   self:resetCollisions()
   for _,v in pairs(self.objects) do 
@@ -134,20 +117,16 @@ end
 
 -- DRAW --
 
-function Scene:draw(camera)
-  local sortedList = self:getSortedList()
-  if self.background then self:drawBackground() end
-  self:drawFloor()
-  self:drawHorizonLine()
-  for i,v in ipairs(sortedList) do
-    if v.shadow and v.shadow=='on' then 
-      v:drawShadow(camera) 
-    end
+function Scene:setupDraw(camera)
+  addToDrawList(math.huge, function()
+    if self.background then self:drawBackground() end
+    self:drawFloor()
+    self:drawHorizonLine()
+  end)
+  for i,v in pairs(self.objects) do
+    v:setupDraw(camera)
   end
-  for i,v in ipairs(sortedList) do
-    v:draw(camera)
-  end
-  if self.transition then self.transition:draw() end
+  if self.transition then self.transition:setupDraw() end
 end
 
 function Scene:drawHorizonLine( )
@@ -170,7 +149,8 @@ function Scene:drawBackground()
   local x = camera:getEdgeOffset(y)
   local groundPos = camera:groundToScreen(vector(x, y))
   local imageHeight = self.background.image:getHeight()
-  love.graphics.draw(self.background.image, self.background.pos.x+groundPos.x, 2-imageHeight+winHeight-activeScene.horizon)
+  love.graphics.draw(self.background.image, self.background.pos.x+groundPos.x, 
+              2-imageHeight+winHeight-activeScene.horizon)
 end
 
 function Scene:drawFloor()
@@ -186,10 +166,10 @@ function Scene:resetCollisions()
 end
 
 function Scene:processCollisions()
-  local sortedList = self:getSortedList()
-  for i=1,#sortedList do
-    for j=i+1,#sortedList do
-      obj1, obj2 = sortedList[i], sortedList[j]
+  local compd = {}
+  for key1,obj1 in next, self.objects, nil do
+    for key2,obj2 in next, self.objects, key1 do
+
       local le1,ri1,fr1,ba1,bo1,to1= obj1:getSides()
       local le2,ri2,fr2,ba2,bo2,to2= obj2:getSides()
 

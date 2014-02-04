@@ -114,8 +114,8 @@ function editor.update( dt )
   end
 end
 
-function editor.draw(camera)
-  selSquare:draw(camera)
+function editor.setupDraw(camera)
+  selSquare:setupDraw(camera)
 end
 
 function editor.getMod( )

@@ -46,32 +46,37 @@ end
 function Label:update(dt)
 end
 
-function Label:draw(camera, base)
-  local textWidth, textHeight = self:getTextDimensions()
+function Label:setupDraw(camera, base)
+  --If label is put on top of square, should draw in front
+  local labelFrontOffset = -0.01
+  local z = self.zOrder or base.pos.y+self.pos.y+labelFrontOffset
+  addToDrawList(z, function()
+    local textWidth, textHeight = self:getTextDimensions()
 
-  love.graphics.setColor(self.color)
-  love.graphics.push()
-  local groundPos = camera:transformCoords(base.pos.x + self.pos.x, base.pos.y + self.pos.y)
-  local headY = groundPos.y - base.size - base.elevation
-  love.graphics.translate(groundPos.x, headY)
+    love.graphics.setColor(self.color)
+    love.graphics.push()
+    local groundPos = camera:transformCoords(base.pos.x + self.pos.x, base.pos.y + self.pos.y)
+    local headY = groundPos.y - base.size - base.elevation
+    love.graphics.translate(groundPos.x, headY)
 
-  -- Text boxes don't scale in perspective normally.
-  -- This is some magic to get the boxes to scale, but not the offset
-  local textBoxOffset = -(textHeight + self.triHeight + self.elevationOffset + self.padding)
-  local scale = camera:getScale(base.pos.y + self.pos.y)
-  local scaleCorrection = (self.perspectiveCorrection + scale*(1-self.perspectiveCorrection))
-  -- undo previous scale operation
-  love.graphics.scale(1/scale, 1/scale)
-  -- apply new perspective
-  love.graphics.scale(scaleCorrection, scaleCorrection)
-  love.graphics.translate(0, textBoxOffset)
+    -- Text boxes don't scale in perspective normally.
+    -- This is some magic to get the boxes to scale, but not the offset
+    local textBoxOffset = -(textHeight + self.triHeight + self.elevationOffset + self.padding)
+    local scale = camera:getScale(base.pos.y + self.pos.y)
+    local scaleCorrection = (self.perspectiveCorrection + scale*(1-self.perspectiveCorrection))
+    -- undo previous scale operation
+    love.graphics.scale(1/scale, 1/scale)
+    -- apply new perspective
+    love.graphics.scale(scaleCorrection, scaleCorrection)
+    love.graphics.translate(0, textBoxOffset)
 
-  self:drawBox()
-  love.graphics.setFont(Label.font)
-  love.graphics.setColor(self.textColor)
-  love.graphics.printf(self.content, -textWidth/2, 0, textWidth, "center")
+    self:drawBox()
+    love.graphics.setFont(Label.font)
+    love.graphics.setColor(self.textColor)
+    love.graphics.printf(self.content, -textWidth/2, 0, textWidth, "center")
 
-  love.graphics.pop()
+    love.graphics.pop()
+  end)
 end
 
 function Label:drawBox()

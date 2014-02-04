@@ -109,7 +109,12 @@ end
 
 function scripts.dialogTest( scene, player, interactionCube )
   if (love.keyboard.wasJustPressed(" ")) then
-    print("dialog test")
-    print(scene.dialogs['chameleonDialog']:next())
+    if activeDialog then 
+      activeDialog:next()
+    else
+      activeDialog = Dialog('chameleon', activeScene, function()
+        activeDialog = nil
+      end)
+    end
   end
 end

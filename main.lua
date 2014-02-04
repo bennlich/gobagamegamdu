@@ -53,8 +53,24 @@ function enterEditor(  )
   end
 end
 
+function addToDrawList(z, drawFunction)
+  assert(type(z)=='number', "First argument to addToDrawList must be a number")
+  assert(type(drawFunction)=='function', 
+    "Second argument to addToDrawList must be a function. Was instead "..type(drawFunction))
+  table.insert(drawList, {z=z, f=drawFunction})
+end
+
 function love.draw() 
-  activeScene:draw(camera)
-  if editor then editor.draw(camera) end
+  drawList = {}
+  activeScene:setupDraw(camera)
+  if editor then editor.setupDraw(camera) end
+
+  --Sort the draw functions and then call them
+  table.sort(drawList, function( v1, v2 )
+    return v1.z > v2.z
+  end)
+  for _,v in ipairs(drawList) do
+    v.f()
+  end
 end
 
