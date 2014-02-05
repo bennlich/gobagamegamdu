@@ -9,7 +9,7 @@ local activeSquare = nil
 local editor = {}
 -- e is where all of the edit functions live
 local e = {}
-local selSquare = Square{border={thickness=4, color=colors.red},color={0,0,0,0}}
+local selSquare = Square{border={thickness=4, color=colors.red},color={0,0,0,0}, shadow='off'}
 
 local nothingSelected = {
   update = 'nothingSelectedUpdate',
@@ -47,6 +47,7 @@ local squareSelected = {
     n = 'enterColorNameMode',
     tab = 'selectNext',
     escape = 'unselect',
+    backspace = 'deleteSelected',
     o = 'write'
   },
   mousePressed = {
@@ -106,7 +107,7 @@ function editor.update( dt )
       end
     end
   end
-  if activeSquare then
+  if activeSquare  then
     local offset = 20
     selSquare.size = activeSquare.size + offset
     selSquare.pos = activeSquare.pos
@@ -115,14 +116,17 @@ function editor.update( dt )
 end
 
 function editor.setupDraw(camera)
-  selSquare:setupDraw(camera)
+  if selSquare and activeSquare then
+    selSquare:setupDraw(camera)
+  end
 end
 
 function editor.getMod( )
   if love.keyboard.isDown('lshift') then return 3 else return 1 end
 end
 
-function e.nothingSelectedUpdate(dt, m) end
+function e.nothingSelectedUpdate(dt, m) 
+end
 
 function e.squareSelectedUpdate(dt, m) 
   if not activeSquare then e.unselect() end
@@ -175,6 +179,11 @@ function e.unselect(dt, m)
   editorMode = nothingSelected
 end
 
+function e.deleteSelected(dt, m)
+  activeScene:remove(activeSquare.name)
+  e.unselect(dt, m)
+end
+
 function e.addNewSquare(dt, m)
   local mouseX, mouseY = love.mouse.getX(), love.mouse.getY()
   local groundPos = camera:screenToGround(vector(mouseX, mouseY))
@@ -206,6 +215,7 @@ function e.selectOrAddNewSquare(dt, m)
     if mouseX > b[1] and mouseX < b[1]+b[3]
       and mouseY > b[2] and mouseY < b[2]+b[4] then
       activeSquare = v
+      editorMode=squareSelected
       selected = true
     end
   end

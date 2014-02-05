@@ -1,7 +1,7 @@
 {
 	{ name = "chameleon", content = {
 		"Shmurgggh... looks like I'm cornered.",
-		"What'll it be then?"
+		"What'll it be then?",
 	} },
 	{ name = "player1", content = {
 		"Huh?"
@@ -51,7 +51,7 @@
 		"What was that noise Mom made at the end of the story?"
 	} },
 	{ name = "player2", content = {
-		""
+		{filename="squiggle.png"}
 	}, onTrigger = "player2MakesFunnyNoises" },
 	{ name = "player1", content = {
 		"Have you ever heard that?"
