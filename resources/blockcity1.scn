@@ -1,7 +1,7 @@
 {
   name="blockcity1",
-  width=4000,
-  horizon = 0.6,
+  width=3000,
+  horizon = 0.3,
   background = {
     filename = "BlockCitybackground.png",
     pos = {0, 500}
@@ -49,7 +49,7 @@
     {from = "default", pos = {100, 50}}
   },
   exits = {
-    {leaveOn = "edgeLeft", to="beachblimp", transition="fadeOut"},
+    {leaveOn = "edgeLeft", to="atthetower", transition="fadeOut"},
     {leaveOn = "edgeRight", to="blockcity2"},
   },
   collisionEvents = {

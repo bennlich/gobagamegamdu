@@ -2,12 +2,15 @@ input = require("input")
 vector = require("libs.hump.vector")
 tween = require("libs.tween")
 editor = require("editor")
+require("enet")
 require("square")
 require("player")
 require("camera")
 require("scene")
 require("label")
 require("util")
+
+network = require("network")
 
 function love.load()
   winWidth, winHeight = love.window.getDimensions()
@@ -32,6 +35,8 @@ function love.update( dt )
     tween.update(dt)
     activeScene:update(dt)
   end
+
+  network.update()
 end
 
 function switchScene(name, from)

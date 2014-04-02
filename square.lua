@@ -1,4 +1,4 @@
-  Class = require("libs.hump.class")
+ Class = require("libs.hump.class")
 
 require("loadable")
 require("label")
@@ -122,4 +122,5 @@ function Square:setupDrawShadow(camera)
     love.graphics.draw(shadowMesh)
     love.graphics.pop()
   end)
+-- love.graphics.setBlendMode(mode)
 end
