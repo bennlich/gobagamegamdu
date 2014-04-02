@@ -5,13 +5,13 @@
   squares = {
     {name = "kid1", pos = {750, 240}, size = 40, 
       color = 'turquoise', label = 'Kid', behavior = {'moveRight'},
-      other = {xVel = 4}},
+      other = {xSpeed = 4}},
     {name = "kid2", pos = {690, 100}, size = 40, 
       color = 'turquoise', label = 'Kid', behavior = {'moveRight'},
-      other = {xVel = 2}},
+      other = {xSpeed = 2}},
     {name = "kid3", pos = {790, 50}, size = 40, 
       color = 'turquoise', label = 'Kid', behavior = {'moveRight'},
-      other = {xVel = 3}},
+      other = {xSpeed = 3}},
     {name = "kidScramEvent", collisionRect={700, 500, 0, 400, 1000, 1}},
 
     {name = "towerBottom", pos = {1000, 0}, size=150, depth=500, 
@@ -22,7 +22,8 @@
       shadow='false', color='white', border={thickness=3, color='black'}},
   },
   entrances = {
-    {from="blockcity1", pos={0, 50}, onEnter="spawnBirds"}
+    {from="blockcity1", pos={0, 50}, onEnter="spawnBirds"},
+    {from="default", pos={0, 50}, onEnter="spawnBirds"}
   },
   collisionEvents = {
     {names = {"kid", "tower"}, onCollide="kidBounce"},

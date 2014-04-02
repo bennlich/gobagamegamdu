@@ -59,7 +59,7 @@ function scripts.spawnBirds( scene, player )
     scene:add(Square{
       name = name, pos = {offset-birdSize/2, birdY}, elevation = 300+math.random(0,90), size=birdSize,
       label = "Bird", color='white', border={thickness=2, color='gray'}, 
-      behavior = {'moveRight'}, other = {xVel = 4}
+      behavior = {'moveRight'}, other = {xSpeed = 4}
       }
     )
     numBirds = numBirds+1

@@ -2,6 +2,7 @@ input = require("input")
 vector = require("libs.hump.vector")
 tween = require("libs.tween")
 editor = require("editor")
+network = require("network")
 require("enet")
 require("square")
 require("player")
@@ -10,21 +11,57 @@ require("scene")
 require("label")
 require("util")
 
-network = require("network")
+pretty = require("pl.pretty")
 
-function love.load()
+
+function love.load(args)
   winWidth, winHeight = love.window.getDimensions()
   input.register(love)
   love.graphics.setBackgroundColor( 255, 255, 255 ) 
   Label.loadFont()
 
+  print(pretty.write(args))
   mode = 'game'
 
-  world_vers = 1
-  player = Player({size = 50, color = 'yellowGreen', 
-                  name = "player" .. tostring(world_vers), label="You"})
+  localPlayerBehaviors = {'controlledByKeyboard', 'keepOnScreen', 'sync'}
+  remotePlayerBehaviors = {}
+
+  if args[2] == "1" then
+    world_vers = 1
+    p1Behaviors, p2Behaviors = localPlayerBehaviors, remotePlayerBehaviors
+    p1Label, p2Label = "You", "Them"
+    network.initAsServer()
+  else
+    world_vers = 2
+    p1Behaviors, p2Behaviors = remotePlayerBehaviors, localPlayerBehaviors
+    p1Label, p2Label = "Them", "You"
+    network.initAsClient()
+  end
+
+
+  player1 = Square({size = 50, color = 'yellowGreen',
+                  name = "player1", label=p1Label, 
+                  behavior = p1Behaviors,
+                  other = {xSpeed = 7, ySpeed = 3}})
+
+  player2 = Square({size = 70, color = 'magenta',
+                  name = "player2", label=p2Label, 
+                  behavior = p2Behaviors,
+                  other = {xSpeed = 7, ySpeed = 3}})
+  -- TODO: Do we need a "player" global var? where do we use it?
+  if world_vers == 1 then
+    player = player1
+    partner = player2
+  else
+    player = player2
+    partner = player1
+  end
+
   scenes = {}
-  switchScene("blockcity1")
+  switchScene("atthetower")
+
+  --TODO SHOULD GENERICIZE ADDING PARTNERS
+  activeScene:add(partner)
 end
 
 function love.update( dt )

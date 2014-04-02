@@ -1,10 +1,11 @@
 require("enet")
 input = require("input")
+pretty = require("pl.pretty")
 local network = {}
 
 function network.sendMessage(msg)
+  if type(msg) == 'table' then msg = pretty.write(msg) end
   if network.peer then
-    print("Message sent:", msg)
     network.peer:send(msg) 
   end
 end
@@ -28,17 +29,11 @@ function network.update( dt )
   end
 end
 
-
 function network.messageReceived( data )
-  print('hey', data)
-  if data == 'moveLeft' then
-    player:moveLeft()
-  elseif data == 'moveRight' then
-    player:moveRight()
-  elseif data == 'moveDown' then
-    player:moveDown()
-  elseif data == 'moveUp' then
-    player:moveUp()
+  --TODO SHOULD PASS IN SCENE HERE
+  data = pretty.read(data) or data
+  if type(data) == 'table' then
+    activeScene.objects[data.name].pos = vector(data.pos.x, data.pos.y)
   end
 end
 

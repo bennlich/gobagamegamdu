@@ -10,6 +10,7 @@ Square = Class{__includes=Loadable,
   defaults = {
     name = "missingno",
     pos = vector(0,0),
+    vel = vector(0,0),
     size = 0,
     color = {0,0,0,255},
     elevation = 0,
@@ -69,6 +70,9 @@ function Square:update(dt,scene)
   for _,v in pairs(self.behavior) do
     behaviors[v](dt, self, scene)
   end
+
+  self.pos = self.pos + self.vel
+  self.vel = vector(0,0)
 end
 
 function Square:getScreenBounds(camera)
