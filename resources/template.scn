@@ -2,9 +2,29 @@
   name="name",
   width=800,
   horizon = 0.7,
-  squares = {},
+  background = {
+    filename="background.png"
+    pos = {0, 500}
+  },
+  floorColor = {255, 255, 255},
+  squares = {
+    {name = "templateSquare", pos = {100, 100}, size = 100,
+      elevation = 0, depth = 10, color = "magenta", shadow = 'off',
+      label = {content = "Test Square", elevationOffset = 0},
+      collisionRect = {0, 0, 0, 10, 10, 10},
+      border = {thickness=1, color='black'},
+      behavior = {"behavior1", "behavior2"},
+      other = {arg1 = 4}
+    }
+  },
   entrances = {
   	{from = 'default', pos = {-100, -100}}
   },
-  collisionEvents = {}
+  exits = {
+    {leaveOn = 'edgeLeft', to="nextScene", transition="fadeOut"}
+  },
+  collisionEvents = {
+  	{names = {"obj1", "obj2"}, 
+      onCollide="event", onColliding="event", onRelease="event"}
+  }
 }

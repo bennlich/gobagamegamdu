@@ -1,0 +1,44 @@
+{
+  name="networktest",
+  width=800,
+  horizon = 0.7,
+  floorColor = {255, 255, 255},
+  squares = {
+    {name = "apple1", size = 30,
+      depth = 30, color = "red", label = "Apple 1",
+      behavior = {"keepOnScreen", "syncMovement"},
+      [1] = {pos = {400, 50}},
+      [2] = {pos = {200, 50}},
+    },
+    {name = "apple2", size = 30,
+      depth = 30, color = "red", label = "Apple 2",
+      behavior = {"keepOnScreen", "syncMovement"},
+      [1] = {pos = {400, 200} },
+      [2] = {pos = {200, 200} },
+    },
+    {name = "apple3", size = 30,
+      depth = 30, color = "red", label = "Apple 3",
+      behavior = {"keepOnScreen", "syncMovement", "averageCollisionRect"},
+      [1] = {pos = {400, 450} },
+      [2] = {pos = {200, 450} },
+    },
+  },
+  entrances = {
+    {from = 'default', pos = {100, 100}}
+  },
+  exits = {
+  },
+  collisionEvents = {
+    -- Collide Apple1 in my world
+    {names = {"apple1", "player1"}, worldVers=1, onColliding="stopObj1"},
+    {names = {"apple1", "player2"}, worldVers=2, onColliding="stopObj1"},
+    -- Collide Apple2 in the other player's world
+    {names = {"apple2", "player2"}, worldVers=1, onColliding="stopObj1"},
+    {names = {"apple2", "player1"}, worldVers=2, onColliding="stopObj1"},
+    -- Collide Apple3 in my world
+    {names = {"apple3", "player1"}, worldVers=1, 
+      onColliding={"stopObj1", "moveCollRect1"}},
+    {names = {"apple3", "player2"}, worldVers=2, 
+      onColliding={"stopObj1", "moveCollRect1"}},
+  }
+}

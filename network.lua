@@ -30,11 +30,9 @@ function network.update( dt )
 end
 
 function network.messageReceived( data )
-  --TODO SHOULD PASS IN SCENE HERE
-  data = pretty.read(data) or data
-  if type(data) == 'table' then
-    activeScene.objects[data.name].pos = vector(data.pos.x, data.pos.y)
-  end
+  data = pretty.read(data) 
+  
+  network[data.event](data)
 end
 
 function network.shutDown(  )
@@ -59,6 +57,25 @@ function network.initAsServer()
   network.shutDown()
   network.type = "server"
   network.host = enet.host_create("localhost:8080")
+end
+
+-- Network events; what to do when a message is received
+
+function network.setPos(data)
+  local obj = activeScene.objects[data.name]
+  obj.pos = vector(data.pos.x, data.pos.y)
+end
+
+function network.movePos(data)
+  local obj = activeScene.objects[data.name]
+  local delta = vector(data.delta.x, data.delta.y)
+  obj.pos = obj.pos + delta
+  obj.oldPos = obj.pos
+end
+
+function network.storePos(data)
+  local obj = activeScene.objects[data.name]
+  obj.otherWorldPos = vector(data.pos.x, data.pos.y)
 end
 
 return network

@@ -18,6 +18,26 @@ function scripts.stopObj1( scene, obj1, obj2, penAmt, penDir)
   end
 end
 
+function scripts.moveCollRect1( scene, obj1, obj2, penAmt, penDir)
+  -- Todo write a script that converts "penDir" into modulations of vector
+  local cr = obj1.collisionRect
+  if cr and not table.empty(cr) then
+    if penDir == 'left' then 
+      cr[1] = cr[1] - penAmt
+    elseif penDir == 'right' then 
+      cr[1] = cr[1] + penAmt
+    elseif penDir == 'top' then 
+      cr[3] = cr[3] + penAmt
+    elseif penDir == 'bottom' then 
+      cr[3] = cr[3] - penAmt
+    elseif penDir == 'front' then 
+      cr[2] = cr[2] - penAmt
+    elseif penDir == 'back' then 
+      cr[2] = cr[2] + penAmt
+    end
+  end
+end
+
 function scripts.playerHitFisherpit( scene, player, fisherpit )
   -- if scene.objects["dog"] and fisherpit.inAir then
   if not fisherpit.inAir then

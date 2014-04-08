@@ -1,3 +1,4 @@
+vector = require("libs.hump.vector")
 behaviors = {}
 
 -- Requires: 
@@ -30,24 +31,39 @@ end
 function behaviors.controlledByKeyboard(dt, obj, scene)
   if love.keyboard.isDown('left') then 
     behaviors.moveLeft(dt, obj, scene)
-    network.sendMessage("moveLeft")
   end
   if love.keyboard.isDown('right') then 
     behaviors.moveRight(dt, obj, scene)
-    network.sendMessage("moveRight")
   end
   if love.keyboard.isDown('down') then 
     behaviors.moveForward(dt, obj, scene)
-    network.sendMessage("moveForward")
   end
   if love.keyboard.isDown('up') then 
     behaviors.moveBack(dt, obj, scene)
-    network.sendMessage("moveBack")
   end
 end
 
-function behaviors.sync(dt, obj, scene)
-  network.sendMessage({name = obj.name, pos = obj.pos})
+function behaviors.syncPosition(dt, obj, scene)
+  network.sendMessage({event = "setPos", name = obj.name, pos = obj.pos})
+end
+
+function behaviors.syncMovement(dt, obj, scene)
+  local delta = obj.pos - obj.oldPos
+  if (delta.x ~= 0 or delta.y ~= 0) then
+    network.sendMessage({event = "movePos", name = obj.name, delta = delta})
+  end
+end
+
+function behaviors.averageCollisionRect(dt, obj, scene)
+
+  if obj.otherWorldPos then
+    local avgX = (obj.pos.x + obj.otherWorldPos.x)/2
+    local avgY = (obj.pos.y + obj.otherWorldPos.y)/2
+    obj.collisionRect = {avgX, avgY, obj.elevation, 
+                        obj.size, obj.depth, obj.size}
+  end
+
+  network.sendMessage({event = "storePos", name = obj.name, pos = obj.pos})
 end
 
 -- Requires: 
@@ -55,6 +71,7 @@ end
 function behaviors.keepOnScreen(dt, obj, scene)
   -- Stop player from going off front of screen
   if obj.pos.y + obj.vel.y < 0 then 
+    obj.pos.y = 0
     obj.vel.y = 0 
     scene:collided(obj, {name="edgeFront"}) 
   end

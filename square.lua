@@ -46,6 +46,7 @@ Square = Class{__includes=Loadable,
 
     -- If behavior is just a string, make a trivial array
     if type(self.behavior) == 'string' then self.behavior = {self.behavior} end
+    self.oldPos = self.pos
   end
 }
 
@@ -71,6 +72,7 @@ function Square:update(dt,scene)
     behaviors[v](dt, self, scene)
   end
 
+  self.oldPos = self.pos:clone()
   self.pos = self.pos + self.vel
   self.vel = vector(0,0)
 end

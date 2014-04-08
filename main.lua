@@ -5,7 +5,6 @@ editor = require("editor")
 network = require("network")
 require("enet")
 require("square")
-require("player")
 require("camera")
 require("scene")
 require("label")
@@ -20,10 +19,9 @@ function love.load(args)
   love.graphics.setBackgroundColor( 255, 255, 255 ) 
   Label.loadFont()
 
-  print(pretty.write(args))
   mode = 'game'
 
-  localPlayerBehaviors = {'controlledByKeyboard', 'keepOnScreen', 'sync'}
+  localPlayerBehaviors = {'controlledByKeyboard', 'keepOnScreen', 'syncPosition'}
   remotePlayerBehaviors = {}
 
   if args[2] == "1" then
@@ -42,12 +40,12 @@ function love.load(args)
   player1 = Square({size = 50, color = 'yellowGreen',
                   name = "player1", label=p1Label, 
                   behavior = p1Behaviors,
-                  other = {xSpeed = 7, ySpeed = 3}})
+                  other = {xSpeed = 7, ySpeed = 4}})
 
   player2 = Square({size = 70, color = 'magenta',
                   name = "player2", label=p2Label, 
                   behavior = p2Behaviors,
-                  other = {xSpeed = 7, ySpeed = 3}})
+                  other = {xSpeed = 7, ySpeed = 4}})
   -- TODO: Do we need a "player" global var? where do we use it?
   if world_vers == 1 then
     player = player1
@@ -58,7 +56,7 @@ function love.load(args)
   end
 
   scenes = {}
-  switchScene("atthetower")
+  switchScene("networktest")
 
   --TODO SHOULD GENERICIZE ADDING PARTNERS
   activeScene:add(partner)

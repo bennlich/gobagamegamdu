@@ -37,7 +37,10 @@ Scene = Class{
     end
     if data.collisionEvents then
       for _,v in pairs(data.collisionEvents) do
-        self:registerCollisionEvent(v)
+        -- TODO: MAKE COLLISIONEVENTS LOADABLES
+        if v.worldVers == world_vers then
+          self:registerCollisionEvent(v)
+        end
       end
     end
     if data.entrances then
@@ -199,18 +202,19 @@ function Scene:processCollisions()
   -- Call collision callbacks
   for k,v in pairs(self.collidedThisFrame) do
     -- Called the first time the objects collide
+    opts = {self, v.obj1, v.obj2, v.penAmt, v.penDir}
     if v.event.onCollide and not self.collidedLastFrame[k] then 
-      scripts[v.event.onCollide](self, v.obj1, v.obj2, v.penAmt, v.penDir) 
+      self:callEvents(v.event.onCollide, opts)
     end
     -- Called as long as the object is in the other object
     if v.event.onColliding then 
-      scripts[v.event.onColliding](self, v.obj1, v.obj2, v.penAmt, v.penDir) 
+      self:callEvents(v.event.onColliding, opts)
     end
   end
   for k,v in pairs(self.collidedLastFrame) do
     -- Called when two objects disengage
     if v.event.onRelease and not self.collidedThisFrame[k] then
-      scripts[v.event.onRelease](self, v.obj1, v.obj2, v.penAmt, v.penDir) 
+      self:callEvents(v.event.onRelease, opts)
     end
   end
 end
@@ -250,6 +254,15 @@ function Scene:collided(obj1, obj2, penAmt, penDir)
         end  
         self:leaveFor(v)
       end
+    end
+  end
+
+  function Scene:callEvents(events, opts)
+    if type(events) == "string" then
+      events = {events}
+    end
+    for _,v in pairs(events) do
+      scripts[v](unpack(opts))
     end
   end
 end
