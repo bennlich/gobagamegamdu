@@ -1,0 +1,211 @@
+{
+  width = 800,
+  squares = {
+    ["4"] = {
+      size = 100,
+      color = {
+        102,
+        101,
+        102
+      },
+      elevation = 0,
+      behavior = {
+      },
+      depth = 10,
+      collisionRect = {
+      },
+      pos = {
+        y = 238,
+        x = 672
+      },
+      other = {
+      },
+      border = {
+      },
+      name = "4",
+      shadow = "on"
+    },
+    ["1"] = {
+      size = 172,
+      color = {
+        1,
+        101,
+        102,
+        255
+      },
+      elevation = 157,
+      behavior = {
+      },
+      depth = 10,
+      collisionRect = {
+      },
+      pos = {
+        y = 991,
+        x = -182
+      },
+      other = {
+      },
+      border = {
+      },
+      name = "1",
+      shadow = "on"
+    },
+    ["7"] = {
+      size = 100,
+      color = {
+        102,
+        101,
+        102
+      },
+      elevation = 0,
+      behavior = {
+      },
+      depth = 10,
+      collisionRect = {
+      },
+      pos = {
+        y = 2252,
+        x = 820
+      },
+      label = {
+        pos = {
+          y = 0,
+          x = 0
+        },
+        fillColor = {
+          255,
+          255,
+          255
+        },
+        color = {
+          0,
+          0,
+          0
+        },
+        textColor = {
+          37,
+          30,
+          32
+        },
+        width = 0,
+        content = "Bitch",
+        elevationOffset = 15
+      },
+      other = {
+      },
+      border = {
+      },
+      name = "7",
+      shadow = "on"
+    },
+    ["2"] = {
+      size = 100,
+      color = {
+        102,
+        101,
+        102
+      },
+      elevation = 0,
+      behavior = {
+      },
+      depth = 10,
+      collisionRect = {
+      },
+      pos = {
+        y = 432,
+        x = 318
+      },
+      other = {
+      },
+      border = {
+      },
+      name = "2",
+      shadow = "on"
+    },
+    ["6"] = {
+      size = 100,
+      color = {
+        102,
+        101,
+        102
+      },
+      elevation = 0,
+      behavior = {
+      },
+      depth = 10,
+      collisionRect = {
+      },
+      pos = {
+        y = 71,
+        x = 151
+      },
+      other = {
+      },
+      border = {
+      },
+      name = "6",
+      shadow = "on"
+    },
+    ["3"] = {
+      size = 100,
+      color = {
+        102,
+        101,
+        102
+      },
+      elevation = 0,
+      behavior = {
+      },
+      depth = 10,
+      collisionRect = {
+      },
+      pos = {
+        y = 756,
+        x = 559
+      },
+      other = {
+      },
+      border = {
+      },
+      name = "3",
+      shadow = "on"
+    },
+    ["5"] = {
+      size = 100,
+      color = {
+        102,
+        101,
+        102
+      },
+      elevation = 0,
+      behavior = {
+      },
+      depth = 10,
+      collisionRect = {
+      },
+      pos = {
+        y = 169,
+        x = 384
+      },
+      other = {
+      },
+      border = {
+      },
+      name = "5",
+      shadow = "on"
+    }
+  },
+  entrances = {
+    default = {
+      from = "default",
+      pos = {
+        -100,
+        -100
+      }
+    }
+  },
+  collisionEvents = {
+  },
+  name = "name",
+  horizon = 0.7
+}
